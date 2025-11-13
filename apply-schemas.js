@@ -53,6 +53,15 @@ async function applySchemas() {
         await connection.query(traitsSchema);
         console.log('✓ 선수 특성 스키마 적용 완료\n');
 
+        // IP 제한 스키마 적용
+        console.log('IP 제한 스키마 적용 중...');
+        const ipRestrictionSchema = await fs.readFile(
+            path.join(__dirname, 'database', 'ip_restriction_schema.sql'),
+            'utf8'
+        );
+        await connection.query(ipRestrictionSchema);
+        console.log('✓ IP 제한 스키마 적용 완료\n');
+
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log('모든 스키마 적용 완료!');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');

@@ -5,10 +5,20 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/database');
 const { authenticateToken } = require('../middleware/auth');
 
+// IP 주소 추출 헬퍼 함수
+const getClientIp = (req) => {
+    return req.headers['x-forwarded-for']?.split(',')[0].trim() ||
+           req.headers['x-real-ip'] ||
+           req.connection.remoteAddress ||
+           req.socket.remoteAddress ||
+           req.ip;
+};
+
 // 회원가입
 router.post('/register', async (req, res) => {
     try {
         const { username, password } = req.body;
+        const clientIp = getClientIp(req);
 
         if (!username || !password) {
             return res.status(400).json({ error: '아이디와 비밀번호를 입력해주세요.' });
@@ -18,6 +28,36 @@ router.post('/register', async (req, res) => {
             return res.status(400).json({ error: '비밀번호는 최소 4자 이상이어야 합니다.' });
         }
 
+        // IP 차단 확인
+        const [blockedIp] = await db.query(
+            'SELECT ip_address, reason FROM blocked_ips WHERE ip_address = ?',
+            [clientIp]
+        );
+
+        if (blockedIp.length > 0) {
+            await db.query(
+                'INSERT INTO registration_attempts (ip_address, username, success) VALUES (?, ?, FALSE)',
+                [clientIp, username]
+            );
+            return res.status(403).json({ error: '차단된 IP 주소입니다.' });
+        }
+
+        // IP로 이미 가입된 계정 확인
+        const [existingIp] = await db.query(
+            'SELECT user_id, username FROM users WHERE registration_ip = ?',
+            [clientIp]
+        );
+
+        if (existingIp.length > 0) {
+            await db.query(
+                'INSERT INTO registration_attempts (ip_address, username, success) VALUES (?, ?, FALSE)',
+                [clientIp, username]
+            );
+            return res.status(400).json({
+                error: `이 IP 주소로 이미 계정이 생성되었습니다. (기존 계정: ${existingIp[0].username})`
+            });
+        }
+
         // 중복 확인
         const [existing] = await db.query(
             'SELECT user_id FROM users WHERE username = ?',
@@ -25,6 +65,10 @@ router.post('/register', async (req, res) => {
         );
 
         if (existing.length > 0) {
+            await db.query(
+                'INSERT INTO registration_attempts (ip_address, username, success) VALUES (?, ?, FALSE)',
+                [clientIp, username]
+            );
             return res.status(400).json({ error: '이미 존재하는 아이디입니다.' });
         }
 
@@ -33,9 +77,15 @@ router.post('/register', async (req, res) => {
 
         // 사용자 생성 (브론즈 5, 0 티어포인트, 10 배틀에너지, 1000 포인트로 시작)
         const [result] = await db.query(
-            `INSERT INTO users (username, password_hash, tier_points, current_tier, battle_energy, points)
-            VALUES (?, ?, 0, 'BRONZE_5', 10, 1000)`,
-            [username, hashedPassword]
+            `INSERT INTO users (username, password_hash, tier_points, current_tier, battle_energy, points, registration_ip, last_login_ip, last_login_at)
+            VALUES (?, ?, 0, 'BRONZE_5', 10, 1000, ?, ?, NOW())`,
+            [username, hashedPassword, clientIp, clientIp]
+        );
+
+        // 성공 로그 기록
+        await db.query(
+            'INSERT INTO registration_attempts (ip_address, username, success) VALUES (?, ?, TRUE)',
+            [clientIp, username]
         );
 
         res.status(201).json({
@@ -53,6 +103,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     try {
         const { username, password } = req.body;
+        const clientIp = getClientIp(req);
 
         if (!username || !password) {
             return res.status(400).json({ error: '아이디와 비밀번호를 입력해주세요.' });
@@ -76,6 +127,12 @@ router.post('/login', async (req, res) => {
         if (!isValid) {
             return res.status(401).json({ error: '아이디 또는 비밀번호가 올바르지 않습니다.' });
         }
+
+        // 마지막 로그인 IP 업데이트
+        await db.query(
+            'UPDATE users SET last_login_ip = ?, last_login_at = NOW() WHERE user_id = ?',
+            [clientIp, user.user_id]
+        );
 
         // JWT 토큰 생성
         const token = jwt.sign(
