@@ -48,6 +48,19 @@ else
 fi
 
 echo ""
+
+# 선수 특성 스키마 적용
+echo "4. 선수 특성 스키마 적용 중..."
+docker-compose exec -T database mysql -u${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < database/player_traits_schema.sql
+
+if [ $? -eq 0 ]; then
+    echo "   ✓ 선수 특성 스키마 적용 완료"
+else
+    echo "   ✗ 선수 특성 스키마 적용 실패"
+    exit 1
+fi
+
+echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "모든 스키마 적용 완료!"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"

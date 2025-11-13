@@ -44,6 +44,15 @@ async function applySchemas() {
         await connection.query(marketSchema);
         console.log('✓ 이적시장 스키마 적용 완료\n');
 
+        // 선수 특성 스키마 적용
+        console.log('선수 특성 스키마 적용 중...');
+        const traitsSchema = await fs.readFile(
+            path.join(__dirname, 'database', 'player_traits_schema.sql'),
+            'utf8'
+        );
+        await connection.query(traitsSchema);
+        console.log('✓ 선수 특성 스키마 적용 완료\n');
+
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log('모든 스키마 적용 완료!');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');

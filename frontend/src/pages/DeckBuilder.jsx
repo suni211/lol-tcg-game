@@ -266,6 +266,14 @@ function DeckBuilder({ token }) {
                                                             <h4>{card.player_name}</h4>
                                                             <p className="ovr">{card.overall_rating} OVR</p>
                                                             <p className="team-info">{card.team} | {card.season}</p>
+
+                                                            {/* 특성 표시 */}
+                                                            {card.trait_1 && (
+                                                                <div className="card-traits-mini">
+                                                                    <span className="trait-badge-mini">⭐ {card.trait_1}</span>
+                                                                </div>
+                                                            )}
+
                                                             <button
                                                                 onClick={() => handleRemoveCard(position)}
                                                                 className="remove-btn"
@@ -321,6 +329,15 @@ function DeckBuilder({ token }) {
                                 <p className="ovr-large">{card.overall_rating}</p>
                                 <p className="position-badge">{card.position}</p>
                                 <p className="team-season">{card.team}</p>
+
+                                {/* 특성 표시 */}
+                                {(card.trait_1 || card.trait_2) && (
+                                    <div className="card-traits-small">
+                                        {card.trait_1 && <span className="trait-badge-small trait-primary">⭐ {card.trait_1}</span>}
+                                        {card.trait_2 && <span className="trait-badge-small trait-secondary">✦ {card.trait_2}</span>}
+                                    </div>
+                                )}
+
                                 {selectedDeckId && (
                                     <button
                                         onClick={() => {

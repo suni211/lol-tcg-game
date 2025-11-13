@@ -4,6 +4,19 @@ class BattleEngine {
     constructor() {
         this.battleLog = [];
         this.gameTime = 0;
+        this.traitEffects = {
+            'laning_boost': { phase: 'laning', multiplier: 1.2 },
+            'teamfight_boost': { phase: 'teamfight', multiplier: 1.15 },
+            'clutch': { phase: 'clutch', multiplier: 1.18 },
+            'comeback': { phase: 'comeback', multiplier: 1.15 },
+            'snowball': { phase: 'snowball', multiplier: 1.12 },
+            'vision': { phase: 'macro', multiplier: 1.15 },
+            'engage': { phase: 'teamfight', multiplier: 1.18 },
+            'peel': { phase: 'teamfight', multiplier: 1.12 },
+            'jungle_control': { phase: 'jungle', multiplier: 1.18 },
+            'team_boost': { phase: 'all', multiplier: 1.1 },
+            'all_round': { phase: 'all', multiplier: 1.05 }
+        };
     }
 
     // 메인 배틀 실행 함수
@@ -11,13 +24,32 @@ class BattleEngine {
         this.battleLog = [];
         this.gameTime = 0;
 
-        // 팀 능력치 계산 (시너지 보너스 적용)
-        const team1Stats = this.calculateTeamStats(team1, synergyBonus1);
-        const team2Stats = this.calculateTeamStats(team2, synergyBonus2);
+        // 특성 분석
+        const team1Traits = this.analyzeTeamTraits(team1);
+        const team2Traits = this.analyzeTeamTraits(team2);
+
+        // 포지션 시너지 계산
+        const positionSynergy1 = this.calculatePositionSynergy(team1);
+        const positionSynergy2 = this.calculatePositionSynergy(team2);
+
+        // 팀 능력치 계산 (시너지 보너스 + 포지션 시너지 적용)
+        const totalSynergy1 = synergyBonus1 + positionSynergy1;
+        const totalSynergy2 = synergyBonus2 + positionSynergy2;
+
+        const team1Stats = this.calculateTeamStats(team1, totalSynergy1, team1Traits);
+        const team2Stats = this.calculateTeamStats(team2, totalSynergy2, team2Traits);
 
         this.addLog(`=== 게임 시작 ===`);
-        this.addLog(`블루팀 총 전투력: ${team1Stats.totalPower.toFixed(0)} (시너지: +${synergyBonus1}%)`);
-        this.addLog(`레드팀 총 전투력: ${team2Stats.totalPower.toFixed(0)} (시너지: +${synergyBonus2}%)`);
+        this.addLog(`블루팀 총 전투력: ${team1Stats.totalPower.toFixed(0)} (팀 시너지: +${synergyBonus1}%, 포지션 시너지: +${positionSynergy1}%)`);
+        this.addLog(`레드팀 총 전투력: ${team2Stats.totalPower.toFixed(0)} (팀 시너지: +${synergyBonus2}%, 포지션 시너지: +${positionSynergy2}%)`);
+
+        // 주요 특성 표시
+        if (team1Traits.length > 0) {
+            this.addLog(`블루팀 특성: ${team1Traits.map(t => t.trait).join(', ')}`);
+        }
+        if (team2Traits.length > 0) {
+            this.addLog(`레드팀 특성: ${team2Traits.map(t => t.trait).join(', ')}`);
+        }
         this.addLog('');
 
         // 게임 페이즈 시뮬레이션
@@ -68,23 +100,68 @@ class BattleEngine {
         };
     }
 
-    // 팀 전체 능력치 계산
-    calculateTeamStats(team, synergyBonus) {
+    // 팀 특성 분석
+    analyzeTeamTraits(team) {
+        const traits = [];
+        team.forEach(player => {
+            if (player.trait_1) traits.push({ player: player.player_name, trait: player.trait_1 });
+            if (player.trait_2) traits.push({ player: player.player_name, trait: player.trait_2 });
+            if (player.trait_3) traits.push({ player: player.player_name, trait: player.trait_3 });
+        });
+        return traits;
+    }
+
+    // 포지션 시너지 계산
+    calculatePositionSynergy(team) {
+        let synergyBonus = 0;
+        const positions = team.map(p => p.position);
+
+        // JUNGLE-MID 시너지
+        if (positions.includes('JUNGLE') && positions.includes('MID')) {
+            synergyBonus += 8;
+        }
+
+        // ADC-SUPPORT 시너지 (봇 듀오)
+        if (positions.includes('ADC') && positions.includes('SUPPORT')) {
+            synergyBonus += 12;
+        }
+
+        // TOP-JUNGLE 시너지
+        if (positions.includes('TOP') && positions.includes('JUNGLE')) {
+            synergyBonus += 7;
+        }
+
+        return synergyBonus;
+    }
+
+    // 팀 전체 능력치 계산 (특성 효과 적용)
+    calculateTeamStats(team, synergyBonus, teamTraits) {
         const bonus = 1 + (synergyBonus / 100);
 
         let totalTop = 0, totalJungle = 0, totalMid = 0, totalAdc = 0, totalSupport = 0;
         let totalTeamfight = 0, totalLaning = 0, totalMacro = 0, totalOverall = 0;
 
         team.forEach(player => {
-            totalTop += player.stats_top * bonus;
-            totalJungle += player.stats_jungle * bonus;
-            totalMid += player.stats_mid * bonus;
-            totalAdc += player.stats_adc * bonus;
-            totalSupport += player.stats_support * bonus;
-            totalTeamfight += player.stats_teamfight * bonus;
-            totalLaning += player.stats_laning * bonus;
-            totalMacro += player.stats_macro * bonus;
-            totalOverall += player.overall_rating * bonus;
+            // 기본 능력치에 시너지 보너스 적용
+            let playerBonus = bonus;
+
+            // '팀플레이어' 또는 '경험 많은 베테랑' 특성이 있으면 전체 보너스
+            if (player.trait_1 === '팀플레이어' || player.trait_2 === '팀플레이어') {
+                playerBonus *= 1.1;
+            }
+            if (player.trait_1 === '경험 많은 베테랑' || player.trait_2 === '경험 많은 베테랑') {
+                playerBonus *= 1.05;
+            }
+
+            totalTop += player.stats_top * playerBonus;
+            totalJungle += player.stats_jungle * playerBonus;
+            totalMid += player.stats_mid * playerBonus;
+            totalAdc += player.stats_adc * playerBonus;
+            totalSupport += player.stats_support * playerBonus;
+            totalTeamfight += player.stats_teamfight * playerBonus;
+            totalLaning += player.stats_laning * playerBonus;
+            totalMacro += player.stats_macro * playerBonus;
+            totalOverall += player.overall_rating * playerBonus;
         });
 
         return {
@@ -97,7 +174,8 @@ class BattleEngine {
             laning: totalLaning,
             macro: totalMacro,
             totalPower: totalOverall,
-            players: team
+            players: team,
+            traits: teamTraits
         };
     }
 
@@ -106,17 +184,31 @@ class BattleEngine {
         let team1Points = 0;
         let team2Points = 0;
 
+        // 라인전 특성 보너스 적용
+        const team1LaningBonus = this.hasTraitEffect(team1.traits, ['솔로킬러', '스노볼러']) ? 1.2 : 1.0;
+        const team2LaningBonus = this.hasTraitEffect(team2.traits, ['솔로킬러', '스노볼러']) ? 1.2 : 1.0;
+
         // 탑 라인전
-        const topDiff = team1.top - team2.top;
+        const topDiff = (team1.top * team1LaningBonus) - (team2.top * team2LaningBonus);
         if (Math.abs(topDiff) > 10) {
             const winner = topDiff > 0 ? '블루팀' : '레드팀';
-            this.addLog(`${this.gameTime + 8}분: 탑 라인에서 ${winner} ${team1.players[0].player_name}이(가) 솔로킬을 따냅니다!`);
-            team1Points += topDiff > 0 ? 15 : 0;
-            team2Points += topDiff < 0 ? 15 : 0;
+            const topPlayer = topDiff > 0 ?
+                team1.players.find(p => p.position === 'TOP') :
+                team2.players.find(p => p.position === 'TOP');
+
+            if (topPlayer && (topPlayer.trait_1 === '솔로킬러' || topPlayer.trait_2 === '솔로킬러')) {
+                this.addLog(`${this.gameTime + 8}분: 탑 라인에서 ${winner} ${topPlayer.player_name}의 [솔로킬러] 특성이 발동! 압도적인 솔로킬!`);
+                team1Points += topDiff > 0 ? 20 : 0;
+                team2Points += topDiff < 0 ? 20 : 0;
+            } else {
+                this.addLog(`${this.gameTime + 8}분: 탑 라인에서 ${winner}이(가) 솔로킬을 따냅니다!`);
+                team1Points += topDiff > 0 ? 15 : 0;
+                team2Points += topDiff < 0 ? 15 : 0;
+            }
         }
 
         // 미드 라인전
-        const midDiff = team1.mid - team2.mid;
+        const midDiff = (team1.mid * team1LaningBonus) - (team2.mid * team2LaningBonus);
         if (Math.abs(midDiff) > 10) {
             const winner = midDiff > 0 ? '블루팀' : '레드팀';
             this.addLog(`${this.gameTime + 10}분: 미드 라인에서 ${winner}이(가) CS 우위를 가져갑니다!`);
@@ -134,11 +226,16 @@ class BattleEngine {
         }
 
         // 라인전 전체 우위
-        const laningDiff = team1.laning - team2.laning;
+        const laningDiff = (team1.laning * team1LaningBonus) - (team2.laning * team2LaningBonus);
         team1Points += laningDiff > 0 ? laningDiff * 0.3 : 0;
         team2Points += laningDiff < 0 ? Math.abs(laningDiff) * 0.3 : 0;
 
         return { team1Points, team2Points };
+    }
+
+    // 특성 효과 확인 헬퍼 함수
+    hasTraitEffect(teamTraits, traitNames) {
+        return teamTraits.some(t => traitNames.includes(t.trait));
     }
 
     // 미드게임 시뮬레이션
@@ -184,20 +281,52 @@ class BattleEngine {
         let team1Points = 0;
         let team2Points = 0;
 
+        // 팀파이트 특성 보너스
+        const team1TFBonus = this.hasTraitEffect(team1.traits, ['하이퍼캐리', '완벽한 이니시', '이니시에이터']) ? 1.15 : 1.0;
+        const team2TFBonus = this.hasTraitEffect(team2.traits, ['하이퍼캐리', '완벽한 이니시', '이니시에이터']) ? 1.15 : 1.0;
+
+        // 클러치 특성 체크
+        const team1HasClutch = this.hasTraitEffect(team1.traits, ['클러치', '역전의 명수']);
+        const team2HasClutch = this.hasTraitEffect(team2.traits, ['클러치', '역전의 명수']);
+
         // 대규모 팀파이트 3회 시뮬레이션
         for (let i = 1; i <= 3; i++) {
             const randomFactor1 = 0.9 + Math.random() * 0.2; // 0.9 ~ 1.1
             const randomFactor2 = 0.9 + Math.random() * 0.2;
 
-            const team1Power = team1.teamfight * randomFactor1;
-            const team2Power = team2.teamfight * randomFactor2;
+            let team1Power = team1.teamfight * team1TFBonus * randomFactor1;
+            let team2Power = team2.teamfight * team2TFBonus * randomFactor2;
+
+            // 역전 상황 체크 - 지고 있는 팀의 클러치/역전의 명수 발동
+            const currentDiff = team1Points - team2Points;
+            if (currentDiff < -20 && team1HasClutch) {
+                team1Power *= 1.18; // 클러치/역전 보너스
+                this.addLog(`${this.gameTime + (i * 3)}분: 블루팀의 [클러치/역전의 명수] 특성 발동!`);
+            } else if (currentDiff > 20 && team2HasClutch) {
+                team2Power *= 1.18;
+                this.addLog(`${this.gameTime + (i * 3)}분: 레드팀의 [클러치/역전의 명수] 특성 발동!`);
+            }
+
             const diff = team1Power - team2Power;
 
             if (Math.abs(diff) > 5) {
                 const winner = diff > 0 ? '블루팀' : '레드팀';
-                this.addLog(`${this.gameTime + (i * 3)}분: 대규모 팀파이트에서 ${winner}이(가) 승리합니다!`);
-                team1Points += diff > 0 ? 25 : 0;
-                team2Points += diff < 0 ? 25 : 0;
+                const winningTeam = diff > 0 ? team1 : team2;
+
+                // 하이퍼캐리 특성 표시
+                const hypercarry = winningTeam.players.find(p =>
+                    p.trait_1 === '하이퍼캐리' || p.trait_2 === '하이퍼캐리'
+                );
+
+                if (hypercarry) {
+                    this.addLog(`${this.gameTime + (i * 3)}분: 대규모 팀파이트! ${winner} ${hypercarry.player_name}의 [하이퍼캐리] 특성으로 압도적인 딜을 넣습니다!`);
+                    team1Points += diff > 0 ? 30 : 0;
+                    team2Points += diff < 0 ? 30 : 0;
+                } else {
+                    this.addLog(`${this.gameTime + (i * 3)}분: 대규모 팀파이트에서 ${winner}이(가) 승리합니다!`);
+                    team1Points += diff > 0 ? 25 : 0;
+                    team2Points += diff < 0 ? 25 : 0;
+                }
             } else {
                 this.addLog(`${this.gameTime + (i * 3)}분: 팀파이트가 비등하게 진행됩니다.`);
             }

@@ -317,3 +317,45 @@
 .goto-deck-btn:hover {
     background: #229954;
 }
+
+/* 특성 표시 스타일 */
+.card-traits {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+}
+
+.trait-badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: transform 0.2s;
+}
+
+.trait-badge:hover {
+    transform: translateY(-2px);
+}
+
+.trait-primary {
+    background: linear-gradient(135deg, #7fffd4 0%, #00ced1 100%);
+    color: #000;
+    border: 2px solid #7fffd4;
+}
+
+.trait-secondary {
+    background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
+    color: #000;
+    border: 2px solid #ddd;
+}
+
+.trait-tertiary {
+    background: #000;
+    color: #7fffd4;
+    border: 2px solid #7fffd4;
+}

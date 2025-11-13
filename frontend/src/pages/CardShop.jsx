@@ -208,6 +208,27 @@ function CardShop({ token }) {
                             <div className="result-card-info">
                                 <p>{purchaseResult.card.season} | {purchaseResult.card.team}</p>
                                 <p>{purchaseResult.card.position}</p>
+
+                                {/* 특성 표시 */}
+                                {(purchaseResult.card.trait_1 || purchaseResult.card.trait_2 || purchaseResult.card.trait_3) && (
+                                    <div className="card-traits">
+                                        {purchaseResult.card.trait_1 && (
+                                            <span className="trait-badge trait-primary">
+                                                ⭐ {purchaseResult.card.trait_1}
+                                            </span>
+                                        )}
+                                        {purchaseResult.card.trait_2 && (
+                                            <span className="trait-badge trait-secondary">
+                                                ✦ {purchaseResult.card.trait_2}
+                                            </span>
+                                        )}
+                                        {purchaseResult.card.trait_3 && (
+                                            <span className="trait-badge trait-tertiary">
+                                                • {purchaseResult.card.trait_3}
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
                             </div>
                         </div>
 
