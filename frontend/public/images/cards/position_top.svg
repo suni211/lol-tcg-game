@@ -1,0 +1,23 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="topGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C41E3A;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8B0000;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Card Background -->
+  <rect width="300" height="400" rx="20" fill="url(#topGrad)"/>
+
+  <!-- Shield Icon for TOP -->
+  <path d="M150,80 L90,110 L90,200 Q90,260 150,300 Q210,260 210,200 L210,110 Z" fill="#FFFFFF" opacity="0.9"/>
+  <path d="M150,100 L110,120 L110,190 Q110,240 150,270 Q190,240 190,190 L190,120 Z" fill="#C41E3A"/>
+
+  <!-- Sword -->
+  <rect x="145" y="140" width="10" height="100" fill="#FFD700"/>
+  <polygon points="150,130 140,145 160,145" fill="#FFD700"/>
+  <rect x="135" y="240" width="30" height="15" rx="5" fill="#8B4513"/>
+
+  <!-- TOP Text -->
+  <text x="150" y="360" font-family="Arial Black" font-size="40" font-weight="bold" fill="#FFFFFF" text-anchor="middle">TOP</text>
+</svg>

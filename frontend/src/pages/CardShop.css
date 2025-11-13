@@ -196,6 +196,31 @@
     padding: 20px;
     background: #f8f9fa;
     margin-bottom: 20px;
+    animation: cardFlip 0.8s ease-out, cardGlow 2s ease-in-out infinite;
+    transform-style: preserve-3d;
+}
+
+@keyframes cardFlip {
+    0% {
+        transform: rotateY(90deg) scale(0.8);
+        opacity: 0;
+    }
+    50% {
+        transform: rotateY(45deg) scale(0.9);
+    }
+    100% {
+        transform: rotateY(0deg) scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes cardGlow {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.6);
+    }
 }
 
 .result-card-tier {

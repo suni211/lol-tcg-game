@@ -1,0 +1,26 @@
+<svg width="300" height="400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="supGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00CED1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#008B8B;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Card Background -->
+  <rect width="300" height="400" rx="20" fill="url(#supGrad)"/>
+
+  <!-- Healing Symbol (Medical Cross) -->
+  <rect x="130" y="100" width="40" height="120" rx="10" fill="#FFFFFF" opacity="0.9"/>
+  <rect x="90" y="140" width="120" height="40" rx="10" fill="#FFFFFF" opacity="0.9"/>
+
+  <!-- Heart for support -->
+  <path d="M150,250 Q150,235 165,235 Q180,235 180,250 Q180,265 150,285 Q120,265 120,250 Q120,235 135,235 Q150,235 150,250" fill="#FF69B4" opacity="0.8"/>
+
+  <!-- Sparkles/Stars -->
+  <polygon points="220,100 223,108 231,108 225,114 227,122 220,117 213,122 215,114 209,108 217,108" fill="#FFD700"/>
+  <polygon points="80,110 82,116 88,116 83,120 85,126 80,122 75,126 77,120 72,116 78,116" fill="#FFD700"/>
+  <polygon points="200,180 203,188 211,188 205,194 207,202 200,197 193,202 195,194 189,188 197,188" fill="#FFD700"/>
+
+  <!-- SUPPORT Text -->
+  <text x="150" y="340" font-family="Arial Black" font-size="30" font-weight="bold" fill="#FFFFFF" text-anchor="middle">SUPPORT</text>
+</svg>
