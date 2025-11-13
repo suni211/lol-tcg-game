@@ -330,7 +330,7 @@ class BattleEngine {
             const topPlayer = winningTeam.players.find(p => p.position === 'TOP');
             const enemyTop = losingTeam.players.find(p => p.position === 'TOP');
 
-            if (topPlayer) {
+            if (topPlayer && enemyTop) {
                 // 킬 기록
                 this.recordKill(topPlayer.player_name, topDiff > 0 ? 1 : 2);
                 this.recordDeath(enemyTop.player_name, topDiff > 0 ? 2 : 1);
