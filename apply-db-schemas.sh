@@ -12,7 +12,7 @@ fi
 
 # 출석체크 스키마 적용
 echo "1. 출석체크 스키마 적용 중..."
-docker-compose exec -T db mysql -u${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < database/attendance_schema.sql
+docker-compose exec -T database mysql -u${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < database/attendance_schema.sql
 
 if [ $? -eq 0 ]; then
     echo "   ✓ 출석체크 스키마 적용 완료"
@@ -25,7 +25,7 @@ echo ""
 
 # 카드 강화 스키마 적용
 echo "2. 카드 강화 스키마 적용 중..."
-docker-compose exec -T db mysql -u${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < database/enhancement_schema.sql
+docker-compose exec -T database mysql -u${DB_USER} -p${DB_PASSWORD} ${DB_NAME} < database/enhancement_schema.sql
 
 if [ $? -eq 0 ]; then
     echo "   ✓ 카드 강화 스키마 적용 완료"
