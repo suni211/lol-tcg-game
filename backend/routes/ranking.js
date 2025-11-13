@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 const tierSystem = require('../services/tierSystem');
-const { authenticateToken } = require('./auth');
+const { authenticateToken } = require('../middleware/auth');
 
 // 랭킹 조회
 router.get('/', async (req, res) => {

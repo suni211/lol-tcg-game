@@ -6,7 +6,7 @@ const energySystem = require('../services/energySystem');
 const matchmakingSystem = require('../services/matchmakingSystem');
 const tierSystem = require('../services/tierSystem');
 const cardSystem = require('../services/cardSystem');
-const { authenticateToken } = require('./auth');
+const { authenticateToken } = require('../middleware/auth');
 
 // 에너지 상태 조회
 router.get('/energy', authenticateToken, async (req, res) => {

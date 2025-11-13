@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/database');
 const cardSystem = require('../services/cardSystem');
-const { authenticateToken } = require('./auth');
+const { authenticateToken } = require('../middleware/auth');
 
 // 카드 상점 목록 조회
 router.get('/shop', authenticateToken, async (req, res) => {
