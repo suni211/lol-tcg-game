@@ -164,7 +164,7 @@ class CardSystem {
     async getUserCards(db, userId) {
         const [cards] = await db.query(
             `SELECT uc.user_card_id, uc.enhancement_level, uc.enhanced_ovr, cm.*,
-            COALESCE(uc.enhanced_ovr, cm.ovr) as current_ovr
+            COALESCE(uc.enhanced_ovr, cm.overall_rating) as current_ovr
             FROM user_cards uc
             JOIN cards_master cm ON uc.card_id = cm.card_id
             WHERE uc.user_id = ?
@@ -345,8 +345,8 @@ class CardSystem {
                 cm.region,
                 cm.season,
                 cm.position as card_position,
-                cm.ovr as base_ovr,
-                COALESCE(uc.enhanced_ovr, cm.ovr) as overall_rating,
+                cm.overall_rating as base_ovr,
+                COALESCE(uc.enhanced_ovr, cm.overall_rating) as overall_rating,
                 cm.card_tier,
                 cm.card_price,
                 cm.image_url
@@ -375,7 +375,7 @@ class CardSystem {
         for (const deck of decks) {
             const [cards] = await db.query(
                 `SELECT dc.position, uc.enhancement_level, cm.player_name,
-                COALESCE(uc.enhanced_ovr, cm.ovr) as overall_rating,
+                COALESCE(uc.enhanced_ovr, cm.overall_rating) as overall_rating,
                 cm.position as card_position
                 FROM deck_cards dc
                 JOIN user_cards uc ON dc.user_card_id = uc.user_card_id

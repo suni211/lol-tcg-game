@@ -14,7 +14,7 @@ class EnhancementSystem {
             // 대상 카드 정보 확인
             const [targetCard] = await db.query(
                 `SELECT uc.user_card_id, uc.enhancement_level, uc.enhanced_ovr, uc.user_id,
-                cm.card_id, cm.player_name, cm.ovr as base_ovr
+                cm.card_id, cm.player_name, cm.overall_rating as base_ovr
                 FROM user_cards uc
                 JOIN cards_master cm ON uc.card_id = cm.card_id
                 WHERE uc.user_card_id = ? AND uc.user_id = ?`,
@@ -136,8 +136,8 @@ class EnhancementSystem {
 
         // 같은 선수의 다른 카드들 찾기 (덱/시장에서 사용 중이지 않은)
         const [duplicates] = await db.query(
-            `SELECT uc.user_card_id, uc.enhancement_level, uc.enhanced_ovr, cm.ovr as base_ovr,
-            cm.player_name, cm.tier, cm.team, cm.position
+            `SELECT uc.user_card_id, uc.enhancement_level, uc.enhanced_ovr, cm.overall_rating as base_ovr,
+            cm.player_name, cm.card_tier, cm.team, cm.position
             FROM user_cards uc
             JOIN cards_master cm ON uc.card_id = cm.card_id
             WHERE uc.user_id = ?

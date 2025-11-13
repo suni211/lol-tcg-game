@@ -35,6 +35,15 @@ async function applySchemas() {
         await connection.query(enhancementSchema);
         console.log('✓ 카드 강화 스키마 적용 완료\n');
 
+        // 이적시장 스키마 적용
+        console.log('이적시장 스키마 적용 중...');
+        const marketSchema = await fs.readFile(
+            path.join(__dirname, 'database', 'market_schema.sql'),
+            'utf8'
+        );
+        await connection.query(marketSchema);
+        console.log('✓ 이적시장 스키마 적용 완료\n');
+
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
         console.log('모든 스키마 적용 완료!');
         console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
