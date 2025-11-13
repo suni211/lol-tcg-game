@@ -171,26 +171,26 @@ INSERT INTO cards_master (player_name, season, region, team, position, overall_r
 
 -- 팀 시너지 업데이트
 INSERT INTO team_synergies (team_name, season, bonus_percentage, description) VALUES
-('Gen.G', '25 LCK', 15, 'Gen.G 2025 - Ruler 영입으로 완성된 최강 라인업'),
-('HLE', '25 LCK', 15, 'HLE 2025 - Zeus 영입, 최강 탑 라이너 합류'),
-('KT', '25 LCK', 12, 'KT 2025 - 베테랑의 노련함'),
-('T1', '25 LCK', 14, 'T1 2025 - Doran 영입, 안정적인 탑 라인'),
-('DK', '25 LCK', 12, 'DK 2025 - ShowMaker의 리더십'),
-('NS', '25 LCK', 11, 'NS 2025 - Kingen & Lehends 영입'),
-('BRO', '25 LCK', 9, 'BRO 2025 - Clozer 중심 재편'),
-('DRX', '25 LCK', 10, 'DRX 2025 - Teddy 중심 신규 라인업'),
-('DNF', '25 LCK', 10, 'DN FREECS 2025 - Berserker 귀환'),
+('Gen.G', '25 LCK', 15, ''),
+('HLE', '25 LCK', 15, ''),
+('KT', '25 LCK', 12, ''),
+('T1', '25 LCK', 14, ''),
+('DK', '25 LCK', 12, ''),
+('NS', '25 LCK', 11, ''),
+('BRO', '25 LCK', 9, ''),
+('DRX', '25 LCK', 10, ''),
+('DNF', '25 LCK', 10, ''),
 
-('BLG', '25 LPL', 15, 'BLG 2025 - LPL 최강자'),
-('JDG', '25 LPL', 15, 'JDG 2025 - 완벽한 밸런스'),
-('WBG', '25 LPL', 14, 'WBG 2025 - 전설의 TheShy'),
-('TES', '25 LPL', 14, 'TES 2025 - 공격적인 플레이'),
-('LNG', '25 LPL', 14, 'LNG 2025 - Scout의 귀환'),
-('IG', '25 LPL', 10, 'IG 2025 시너지'),
+('BLG', '25 LPL', 15, ''),
+('JDG', '25 LPL', 15, ''),
+('WBG', '25 LPL', 14, ''),
+('TES', '25 LPL', 14, ''),
+('LNG', '25 LPL', 14, ''),
+('IG', '25 LPL', 10, ''),
 
-('G2', '25 LEC', 14, 'G2 2025 - 유럽의 왕'),
-('FNC', '25 LEC', 13, 'FNC 2025 - 전통의 명가'),
-('MAD', '25 LEC', 12, 'MAD 2025 - 젊은 패기'),
+('G2', '25 LEC', 14, ''),
+('FNC', '25 LEC', 13, ''),
+('MAD', '25 LEC', 12, ''),
 
-('C9', '25 LCS', 12, 'C9 2025 - 북미 최강'),
-('TL', '25 LCS', 12, 'TL 2025 - CoreJJ의 리더십');
+('C9', '25 LCS', 12, ''),
+('TL', '25 LCS', 12, '');
