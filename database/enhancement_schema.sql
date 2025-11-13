@@ -1,7 +1,7 @@
--- 카드 강화 컬럼 추가
+-- 카드 강화 컬럼 추가 (이미 존재하면 무시)
 ALTER TABLE user_cards
-ADD COLUMN enhancement_level INT DEFAULT 0 COMMENT '강화 레벨 (0-10)',
-ADD COLUMN enhanced_ovr INT DEFAULT NULL COMMENT '강화된 OVR (NULL이면 기본 OVR 사용)';
+ADD COLUMN IF NOT EXISTS enhancement_level INT DEFAULT 0 COMMENT '강화 레벨 (0-10)',
+ADD COLUMN IF NOT EXISTS enhanced_ovr INT DEFAULT NULL COMMENT '강화된 OVR (NULL이면 기본 OVR 사용)';
 
 -- 강화 기록 테이블
 CREATE TABLE IF NOT EXISTS card_enhancements (
