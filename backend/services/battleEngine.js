@@ -17,12 +17,65 @@ class BattleEngine {
             'team_boost': { phase: 'all', multiplier: 1.1 },
             'all_round': { phase: 'all', multiplier: 1.05 }
         };
+        this.team1KDA = {};
+        this.team2KDA = {};
+    }
+
+    // KDA 초기화
+    initializeKDA(team, teamNumber) {
+        const kdaMap = teamNumber === 1 ? this.team1KDA : this.team2KDA;
+        team.forEach(player => {
+            kdaMap[player.player_name] = {
+                kills: 0,
+                deaths: 0,
+                assists: 0,
+                position: player.position,
+                rating: player.overall_rating,
+                damageDealt: 0,
+                goldEarned: 0
+            };
+        });
+    }
+
+    // 킬 기록
+    recordKill(playerName, teamNumber, isAssist = false) {
+        const kdaMap = teamNumber === 1 ? this.team1KDA : this.team2KDA;
+        if (kdaMap[playerName]) {
+            if (isAssist) {
+                kdaMap[playerName].assists++;
+            } else {
+                kdaMap[playerName].kills++;
+                kdaMap[playerName].goldEarned += 300;
+            }
+        }
+    }
+
+    // 데스 기록
+    recordDeath(playerName, teamNumber) {
+        const kdaMap = teamNumber === 1 ? this.team1KDA : this.team2KDA;
+        if (kdaMap[playerName]) {
+            kdaMap[playerName].deaths++;
+        }
+    }
+
+    // 데미지 기록
+    recordDamage(playerName, teamNumber, damage) {
+        const kdaMap = teamNumber === 1 ? this.team1KDA : this.team2KDA;
+        if (kdaMap[playerName]) {
+            kdaMap[playerName].damageDealt += damage;
+        }
     }
 
     // 메인 배틀 실행 함수
     async simulateBattle(team1, team2, synergyBonus1 = 0, synergyBonus2 = 0) {
         this.battleLog = [];
         this.gameTime = 0;
+        this.team1KDA = {};
+        this.team2KDA = {};
+
+        // KDA 초기화
+        this.initializeKDA(team1, 1);
+        this.initializeKDA(team2, 2);
 
         // 특성 분석
         const team1Traits = this.analyzeTeamTraits(team1);
@@ -91,12 +144,92 @@ class BattleEngine {
         const winnerName = winner === 1 ? '블루팀' : '레드팀';
         this.addLog(`\n승자: ${winnerName}!`);
 
+        // 경기 요약 생성
+        const summary = this.generateBattleSummary(team1, team2, team1Score, team2Score, winner);
+
         return {
             winner: winner,
             team1Score: team1Score,
             team2Score: team2Score,
             battleLog: this.battleLog.join('\n'),
-            duration: this.gameTime
+            duration: this.gameTime,
+            team1KDA: this.team1KDA,
+            team2KDA: this.team2KDA,
+            summary: summary
+        };
+    }
+
+    // 경기 요약 생성
+    generateBattleSummary(team1, team2, team1Score, team2Score, winner) {
+        // MVP 선정 (가장 높은 KDA + 데미지)
+        const allPlayers = [
+            ...Object.entries(this.team1KDA).map(([name, stats]) => ({
+                name,
+                ...stats,
+                team: 1,
+                kdaRatio: stats.deaths === 0 ? (stats.kills + stats.assists) : (stats.kills + stats.assists) / stats.deaths
+            })),
+            ...Object.entries(this.team2KDA).map(([name, stats]) => ({
+                name,
+                ...stats,
+                team: 2,
+                kdaRatio: stats.deaths === 0 ? (stats.kills + stats.assists) : (stats.kills + stats.assists) / stats.deaths
+            }))
+        ];
+
+        // MVP 계산 (KDA * 0.6 + 데미지 비율 * 0.4)
+        const maxDamage = Math.max(...allPlayers.map(p => p.damageDealt));
+        allPlayers.forEach(p => {
+            p.mvpScore = (p.kdaRatio * 0.6) + ((p.damageDealt / maxDamage) * 0.4);
+        });
+
+        const mvp = allPlayers.reduce((prev, current) =>
+            (current.mvpScore > prev.mvpScore) ? current : prev
+        );
+
+        // 팀 총 킬/데스/어시스트
+        const team1TotalKills = Object.values(this.team1KDA).reduce((sum, p) => sum + p.kills, 0);
+        const team1TotalDeaths = Object.values(this.team1KDA).reduce((sum, p) => sum + p.deaths, 0);
+        const team1TotalAssists = Object.values(this.team1KDA).reduce((sum, p) => sum + p.assists, 0);
+
+        const team2TotalKills = Object.values(this.team2KDA).reduce((sum, p) => sum + p.kills, 0);
+        const team2TotalDeaths = Object.values(this.team2KDA).reduce((sum, p) => sum + p.deaths, 0);
+        const team2TotalAssists = Object.values(this.team2KDA).reduce((sum, p) => sum + p.assists, 0);
+
+        // 총 데미지
+        const team1TotalDamage = Object.values(this.team1KDA).reduce((sum, p) => sum + p.damageDealt, 0);
+        const team2TotalDamage = Object.values(this.team2KDA).reduce((sum, p) => sum + p.damageDealt, 0);
+
+        return {
+            mvp: {
+                playerName: mvp.name,
+                team: mvp.team,
+                position: mvp.position,
+                kills: mvp.kills,
+                deaths: mvp.deaths,
+                assists: mvp.assists,
+                kda: mvp.kdaRatio.toFixed(2),
+                damageDealt: Math.floor(mvp.damageDealt),
+                goldEarned: mvp.goldEarned
+            },
+            teamStats: {
+                team1: {
+                    totalKills: team1TotalKills,
+                    totalDeaths: team1TotalDeaths,
+                    totalAssists: team1TotalAssists,
+                    totalDamage: Math.floor(team1TotalDamage),
+                    score: Math.floor(team1Score)
+                },
+                team2: {
+                    totalKills: team2TotalKills,
+                    totalDeaths: team2TotalDeaths,
+                    totalAssists: team2TotalAssists,
+                    totalDamage: Math.floor(team2TotalDamage),
+                    score: Math.floor(team2Score)
+                }
+            },
+            winner: winner,
+            gameDuration: `${Math.floor(this.gameTime)}분`
         };
     }
 
@@ -192,18 +325,26 @@ class BattleEngine {
         const topDiff = (team1.top * team1LaningBonus) - (team2.top * team2LaningBonus);
         if (Math.abs(topDiff) > 10) {
             const winner = topDiff > 0 ? '블루팀' : '레드팀';
-            const topPlayer = topDiff > 0 ?
-                team1.players.find(p => p.position === 'TOP') :
-                team2.players.find(p => p.position === 'TOP');
+            const winningTeam = topDiff > 0 ? team1 : team2;
+            const losingTeam = topDiff > 0 ? team2 : team1;
+            const topPlayer = winningTeam.players.find(p => p.position === 'TOP');
+            const enemyTop = losingTeam.players.find(p => p.position === 'TOP');
 
-            if (topPlayer && (topPlayer.trait_1 === '솔로킬러' || topPlayer.trait_2 === '솔로킬러')) {
-                this.addLog(`${this.gameTime + 8}분: 탑 라인에서 ${winner} ${topPlayer.player_name}의 [솔로킬러] 특성이 발동! 압도적인 솔로킬!`);
-                team1Points += topDiff > 0 ? 20 : 0;
-                team2Points += topDiff < 0 ? 20 : 0;
-            } else {
-                this.addLog(`${this.gameTime + 8}분: 탑 라인에서 ${winner}이(가) 솔로킬을 따냅니다!`);
-                team1Points += topDiff > 0 ? 15 : 0;
-                team2Points += topDiff < 0 ? 15 : 0;
+            if (topPlayer) {
+                // 킬 기록
+                this.recordKill(topPlayer.player_name, topDiff > 0 ? 1 : 2);
+                this.recordDeath(enemyTop.player_name, topDiff > 0 ? 2 : 1);
+                this.recordDamage(topPlayer.player_name, topDiff > 0 ? 1 : 2, 1500);
+
+                if (topPlayer.trait_1 === '솔로킬러' || topPlayer.trait_2 === '솔로킬러') {
+                    this.addLog(`${this.gameTime + 8}분: 탑 라인에서 ${winner} ${topPlayer.player_name}의 [솔로킬러] 특성이 발동! 압도적인 솔로킬!`);
+                    team1Points += topDiff > 0 ? 20 : 0;
+                    team2Points += topDiff < 0 ? 20 : 0;
+                } else {
+                    this.addLog(`${this.gameTime + 8}분: 탑 라인에서 ${winner} ${topPlayer.player_name}이(가) 솔로킬을 따냅니다!`);
+                    team1Points += topDiff > 0 ? 15 : 0;
+                    team2Points += topDiff < 0 ? 15 : 0;
+                }
             }
         }
 
@@ -312,6 +453,28 @@ class BattleEngine {
             if (Math.abs(diff) > 5) {
                 const winner = diff > 0 ? '블루팀' : '레드팀';
                 const winningTeam = diff > 0 ? team1 : team2;
+                const losingTeam = diff > 0 ? team2 : team1;
+
+                // 팀파이트 KDA 기록 (2-3명 킬, 전원 어시스트)
+                const killCount = Math.floor(Math.random() * 2) + 2; // 2-3킬
+                const winningTeamNum = diff > 0 ? 1 : 2;
+                const losingTeamNum = diff > 0 ? 2 : 1;
+
+                // 승리 팀에 킬과 어시스트 기록
+                for (let k = 0; k < killCount && k < winningTeam.players.length; k++) {
+                    this.recordKill(winningTeam.players[k].player_name, winningTeamNum);
+                    this.recordDamage(winningTeam.players[k].player_name, winningTeamNum, 3000 + Math.random() * 2000);
+                }
+                // 나머지는 어시스트
+                for (let k = killCount; k < winningTeam.players.length; k++) {
+                    this.recordKill(winningTeam.players[k].player_name, winningTeamNum, true);
+                    this.recordDamage(winningTeam.players[k].player_name, winningTeamNum, 2000 + Math.random() * 1000);
+                }
+
+                // 패배 팀 데스 기록
+                for (let k = 0; k < killCount && k < losingTeam.players.length; k++) {
+                    this.recordDeath(losingTeam.players[k].player_name, losingTeamNum);
+                }
 
                 // 하이퍼캐리 특성 표시
                 const hypercarry = winningTeam.players.find(p =>
