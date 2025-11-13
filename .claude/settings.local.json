@@ -28,7 +28,9 @@
       "WebSearch",
       "Bash(node adjust-tiers.js:*)",
       "Bash(node rebalance-ovr.js:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(powershell -Command \"Get-Command docker -ErrorAction SilentlyContinue | Select-Object -ExpandProperty Source\")",
+      "Bash(ssh:*)"
     ],
     "deny": [],
     "ask": []

@@ -1,7 +1,7 @@
 // 카드 시스템 및 시너지 관리
 
 class CardSystem {
-    // 팀 시너지 체크
+    // 팀 시너지 체크 (3/4/5명 단계별 시너지)
     async checkTeamSynergy(db, deckId) {
         // 덱의 모든 카드 가져오기
         const [deckCards] = await db.query(
@@ -15,43 +15,73 @@ class CardSystem {
         );
 
         if (deckCards.length !== 5) {
-            return { hasSynergy: false, bonus: 0, team: null, season: null };
+            return { hasSynergy: false, bonus: 0, synergies: [], team: null, season: null };
         }
 
-        // 같은 팀과 시즌인지 확인
-        const firstCard = deckCards[0];
-        const allSameTeam = deckCards.every(
-            card => card.team === firstCard.team && card.season === firstCard.season
-        );
+        // 팀-시즌 조합별로 카드 수 계산
+        const teamSeasonCount = {};
+        deckCards.forEach(card => {
+            const key = `${card.team}_${card.season}`;
+            if (!teamSeasonCount[key]) {
+                teamSeasonCount[key] = {
+                    team: card.team,
+                    season: card.season,
+                    count: 0,
+                    players: []
+                };
+            }
+            teamSeasonCount[key].count++;
+            teamSeasonCount[key].players.push(card.player_name);
+        });
 
-        if (!allSameTeam) {
-            return { hasSynergy: false, bonus: 0, team: null, season: null };
+        // 가장 많은 팀-시즌 조합 찾기
+        let maxCount = 0;
+        let dominantCombo = null;
+        for (const [key, data] of Object.entries(teamSeasonCount)) {
+            if (data.count > maxCount) {
+                maxCount = data.count;
+                dominantCombo = data;
+            }
         }
 
-        // 시너지 보너스 조회
-        const [synergy] = await db.query(
-            'SELECT bonus_percentage, description FROM team_synergies WHERE team_name = ? AND season = ?',
-            [firstCard.team, firstCard.season]
-        );
+        // 단계별 시너지 보너스
+        // 3명: 5%, 4명: 8%, 5명: 12%
+        const synergyTiers = {
+            3: { bonus: 5, description: '(3인 시너지)' },
+            4: { bonus: 8, description: '(4인 시너지)' },
+            5: { bonus: 12, description: '(5인 팀 시너지)' }
+        };
 
-        if (synergy.length === 0) {
-            // 기본 시너지 보너스 10%
+        if (maxCount >= 3) {
+            const tierBonus = synergyTiers[maxCount];
+
+            // DB에서 추가 보너스 조회
+            const [synergy] = await db.query(
+                'SELECT bonus_percentage, description FROM team_synergies WHERE team_name = ? AND season = ?',
+                [dominantCombo.team, dominantCombo.season]
+            );
+
+            const dbBonus = synergy.length > 0 ? synergy[0].bonus_percentage : 0;
+            const totalBonus = tierBonus.bonus + dbBonus;
+
             return {
                 hasSynergy: true,
-                bonus: 10,
-                team: firstCard.team,
-                season: firstCard.season,
-                description: `${firstCard.team} ${firstCard.season} 팀 시너지`
+                bonus: totalBonus,
+                team: dominantCombo.team,
+                season: dominantCombo.season,
+                playerCount: maxCount,
+                description: `${dominantCombo.team} ${dominantCombo.season} ${tierBonus.description}`,
+                synergies: [{
+                    team: dominantCombo.team,
+                    season: dominantCombo.season,
+                    count: maxCount,
+                    bonus: tierBonus.bonus,
+                    players: dominantCombo.players
+                }]
             };
         }
 
-        return {
-            hasSynergy: true,
-            bonus: synergy[0].bonus_percentage,
-            team: firstCard.team,
-            season: firstCard.season,
-            description: synergy[0].description
-        };
+        return { hasSynergy: false, bonus: 0, synergies: [], team: null, season: null };
     }
 
     // 랜덤 카드 뽑기 (가챠 시스템)

@@ -17,8 +17,141 @@ class BattleEngine {
             'team_boost': { phase: 'all', multiplier: 1.1 },
             'all_round': { phase: 'all', multiplier: 1.05 }
         };
+
+        // 전략 시스템 - 각 팀이 선택할 수 있는 전략
+        this.battleStrategies = {
+            'AGGRESSIVE': {
+                name: '공격적 운영',
+                description: '라인전과 초반 싸움에 집중',
+                laningBonus: 1.15,
+                teamfightBonus: 1.05,
+                macroBonus: 0.95,
+                risk: 1.2 // 높은 변동성
+            },
+            'DEFENSIVE': {
+                name: '수비적 운영',
+                description: '안정적인 후반 운영',
+                laningBonus: 0.95,
+                teamfightBonus: 1.1,
+                macroBonus: 1.15,
+                risk: 0.8 // 낮은 변동성
+            },
+            'SPLIT_PUSH': {
+                name: '스플릿 푸쉬',
+                description: '사이드 라인 압박과 분산',
+                laningBonus: 1.1,
+                teamfightBonus: 0.9,
+                macroBonus: 1.2,
+                risk: 1.1
+            },
+            'TEAMFIGHT': {
+                name: '한타 중심',
+                description: '팀파이트 승부',
+                laningBonus: 0.9,
+                teamfightBonus: 1.25,
+                macroBonus: 1.0,
+                risk: 1.15
+            },
+            'VISION_CONTROL': {
+                name: '시야 장악',
+                description: '맵 컨트롤과 정보 우위',
+                laningBonus: 1.0,
+                teamfightBonus: 1.05,
+                macroBonus: 1.2,
+                risk: 0.9
+            },
+            'EARLY_GAME': {
+                name: '초반 집중',
+                description: '초반 스노볼링',
+                laningBonus: 1.2,
+                teamfightBonus: 0.95,
+                macroBonus: 0.95,
+                risk: 1.3
+            },
+            'LATE_GAME': {
+                name: '후반 집중',
+                description: '후반 캐리 집중',
+                laningBonus: 0.85,
+                teamfightBonus: 1.15,
+                macroBonus: 1.1,
+                risk: 0.9
+            },
+            'JUNGLE_CENTRIC': {
+                name: '정글 중심',
+                description: '정글 우위 기반 운영',
+                laningBonus: 1.05,
+                teamfightBonus: 1.05,
+                macroBonus: 1.15,
+                risk: 1.0
+            },
+            'PICK_COMP': {
+                name: '픽 조합',
+                description: '고립된 적 처치',
+                laningBonus: 1.0,
+                teamfightBonus: 0.95,
+                macroBonus: 1.2,
+                risk: 1.1
+            },
+            'POKE_COMP': {
+                name: '포크 조합',
+                description: '원거리 견제',
+                laningBonus: 1.05,
+                teamfightBonus: 1.0,
+                macroBonus: 1.1,
+                risk: 0.95
+            },
+            'ENGAGE_COMP': {
+                name: '이니시 조합',
+                description: '강력한 선공',
+                laningBonus: 0.95,
+                teamfightBonus: 1.2,
+                macroBonus: 1.0,
+                risk: 1.2
+            },
+            'PROTECT_CARRY': {
+                name: '캐리 보호',
+                description: '원딜 중심 조합',
+                laningBonus: 0.9,
+                teamfightBonus: 1.15,
+                macroBonus: 1.05,
+                risk: 1.0
+            }
+        };
+
         this.team1KDA = {};
         this.team2KDA = {};
+        this.team1Strategy = null;
+        this.team2Strategy = null;
+    }
+
+    // 랜덤 전략 선택
+    selectRandomStrategy() {
+        const strategies = Object.keys(this.battleStrategies);
+        const randomIndex = Math.floor(Math.random() * strategies.length);
+        return strategies[randomIndex];
+    }
+
+    // 팀 구성에 맞는 전략 추천 (AI)
+    recommendStrategy(team) {
+        // 팀의 평균 능력치 분석
+        let avgLaning = 0, avgTeamfight = 0, avgMacro = 0;
+        team.forEach(player => {
+            avgLaning += player.stats_laning || 0;
+            avgTeamfight += player.stats_teamfight || 0;
+            avgMacro += player.stats_macro || 0;
+        });
+        avgLaning /= team.length;
+        avgTeamfight /= team.length;
+        avgMacro /= team.length;
+
+        // 가장 높은 능력치에 맞는 전략 추천
+        if (avgLaning > avgTeamfight && avgLaning > avgMacro) {
+            return Math.random() > 0.5 ? 'AGGRESSIVE' : 'EARLY_GAME';
+        } else if (avgTeamfight > avgLaning && avgTeamfight > avgMacro) {
+            return Math.random() > 0.5 ? 'TEAMFIGHT' : 'ENGAGE_COMP';
+        } else {
+            return Math.random() > 0.5 ? 'VISION_CONTROL' : 'SPLIT_PUSH';
+        }
     }
 
     // KDA 초기화
@@ -77,6 +210,13 @@ class BattleEngine {
         this.initializeKDA(team1, 1);
         this.initializeKDA(team2, 2);
 
+        // 전략 선택 (팀 구성에 맞는 AI 추천)
+        this.team1Strategy = this.recommendStrategy(team1);
+        this.team2Strategy = this.recommendStrategy(team2);
+
+        const strategy1 = this.battleStrategies[this.team1Strategy];
+        const strategy2 = this.battleStrategies[this.team2Strategy];
+
         // 특성 분석
         const team1Traits = this.analyzeTeamTraits(team1);
         const team2Traits = this.analyzeTeamTraits(team2);
@@ -92,9 +232,20 @@ class BattleEngine {
         const team1Stats = this.calculateTeamStats(team1, totalSynergy1, team1Traits);
         const team2Stats = this.calculateTeamStats(team2, totalSynergy2, team2Traits);
 
+        // 전략에 따른 능력치 조정
+        team1Stats.laning *= strategy1.laningBonus;
+        team1Stats.teamfight *= strategy1.teamfightBonus;
+        team1Stats.macro *= strategy1.macroBonus;
+
+        team2Stats.laning *= strategy2.laningBonus;
+        team2Stats.teamfight *= strategy2.teamfightBonus;
+        team2Stats.macro *= strategy2.macroBonus;
+
         this.addLog(`=== 게임 시작 ===`);
         this.addLog(`블루팀 총 전투력: ${team1Stats.totalPower.toFixed(0)} (팀 시너지: +${synergyBonus1}%, 포지션 시너지: +${positionSynergy1}%)`);
+        this.addLog(`블루팀 전략: ${strategy1.name} - ${strategy1.description}`);
         this.addLog(`레드팀 총 전투력: ${team2Stats.totalPower.toFixed(0)} (팀 시너지: +${synergyBonus2}%, 포지션 시너지: +${positionSynergy2}%)`);
+        this.addLog(`레드팀 전략: ${strategy2.name} - ${strategy2.description}`);
 
         // 주요 특성 표시
         if (team1Traits.length > 0) {

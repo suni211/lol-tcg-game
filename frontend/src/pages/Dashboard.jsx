@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { authAPI, battleAPI, rankingAPI, attendanceAPI } from '../services/api';
+import ThemeToggle from '../components/ThemeToggle';
 import './Dashboard.css';
 
 function Dashboard({ token, user, setUser }) {
@@ -104,6 +105,7 @@ function Dashboard({ token, user, setUser }) {
                     <Link to="/battle">배틀</Link>
                     <Link to="/rankings">랭킹</Link>
                     <Link to="/profile">프로필</Link>
+                    <ThemeToggle />
                     <button onClick={handleLogout}>로그아웃</button>
                 </div>
             </nav>
