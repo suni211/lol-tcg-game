@@ -1,52 +1,63 @@
 .profile-container {
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--bg-primary);
 }
 
 .profile-nav {
-    background: #2c3e50;
-    color: white;
-    padding: 20px;
+    background: var(--bg-elevated);
+    padding: var(--space-4) var(--space-8);
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    gap: var(--space-6);
+    box-shadow: var(--shadow-md);
+    border-bottom: 1px solid var(--border-primary);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .profile-nav a {
-    color: white;
+    color: var(--text-secondary);
     text-decoration: none;
-    font-size: 16px;
-    transition: opacity 0.3s;
+    font-weight: 600;
+    transition: color var(--transition-fast);
 }
 
 .profile-nav a:hover {
-    opacity: 0.8;
+    color: var(--brand-primary);
 }
 
 .profile-nav h2 {
     margin: 0;
-    font-size: 24px;
+    color: var(--text-primary);
+    font-size: var(--text-2xl);
 }
 
 .profile-content {
+    padding: var(--space-8);
     max-width: 1000px;
     margin: 0 auto;
-    padding: 30px 20px;
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: var(--space-6);
 }
 
-/* 프로필 헤더 */
+/* Profile Header */
 .profile-header {
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
+    background: var(--bg-elevated);
+    border-radius: var(--radius-xl);
+    padding: var(--space-8);
     display: flex;
     align-items: center;
-    gap: 30px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    gap: var(--space-8);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-primary);
+    transition: all var(--transition-base);
+}
+
+.profile-header:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
 .profile-avatar {
@@ -56,13 +67,13 @@
 .avatar-icon {
     width: 120px;
     height: 120px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 60px;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    font-size: var(--text-4xl);
+    box-shadow: var(--shadow-lg);
 }
 
 .profile-info {
@@ -70,183 +81,203 @@
 }
 
 .username {
-    margin: 0 0 15px 0;
-    font-size: 36px;
-    font-weight: bold;
-    color: #2c3e50;
+    margin: 0 0 var(--space-4) 0;
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
 .tier-badge {
     display: inline-flex;
     align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    border: 3px solid;
-    border-radius: 30px;
-    margin-bottom: 10px;
-    background: white;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-6);
+    border: 2px solid var(--border-primary);
+    border-radius: var(--radius-full);
+    margin-bottom: var(--space-2);
+    background: var(--bg-secondary);
 }
 
 .tier-name {
-    font-size: 20px;
-    font-weight: bold;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
 .tier-points {
-    font-size: 16px;
-    color: #7f8c8d;
+    font-size: var(--text-base);
+    color: var(--text-secondary);
 }
 
 .rank-text {
-    font-size: 18px;
-    color: #34495e;
-    margin: 10px 0 5px 0;
+    font-size: var(--text-lg);
+    color: var(--text-secondary);
+    margin: var(--space-2) 0;
     font-weight: 600;
 }
 
 .joined-date {
-    color: #95a5a6;
+    color: var(--text-tertiary);
+    font-size: var(--text-sm);
     margin: 0;
 }
 
-/* 통계 섹션 */
+/* Stats Section */
 .stats-section {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-primary);
+    transition: all var(--transition-base);
+}
+
+.stats-section:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
 .stats-section h3 {
-    margin: 0 0 20px 0;
-    color: #2c3e50;
-    font-size: 24px;
+    margin: 0 0 var(--space-6) 0;
+    color: var(--text-primary);
+    font-size: var(--text-2xl);
 }
 
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 20px;
+    gap: var(--space-4);
 }
 
 .stat-card {
-    background: #f8f9fa;
-    padding: 25px;
-    border-radius: 15px;
+    background: var(--bg-secondary);
+    padding: var(--space-6);
+    border-radius: var(--radius-lg);
     text-align: center;
-    border: 3px solid #ecf0f1;
-    transition: transform 0.3s, box-shadow 0.3s;
+    border: 1px solid var(--border-primary);
+    transition: all var(--transition-fast);
 }
 
 .stat-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-secondary);
 }
 
 .stat-card.wins {
-    border-color: #2ecc71;
-    background: linear-gradient(135deg, #f0fff4, #f0fff4);
+    border-color: var(--success-border);
+    background: var(--success-bg);
 }
 
 .stat-card.losses {
-    border-color: #e74c3c;
-    background: linear-gradient(135deg, #fff5f5, #fff5f5);
+    border-color: var(--error-border);
+    background: var(--error-bg);
 }
 
 .stat-card.winrate {
-    border-color: #3498db;
-    background: linear-gradient(135deg, #eff8ff, #eff8ff);
+    border-color: var(--info-border);
+    background: var(--info-bg);
 }
 
 .stat-value {
-    font-size: 36px;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 8px;
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-2);
 }
 
 .stat-card.wins .stat-value {
-    color: #27ae60;
+    color: var(--success);
 }
 
 .stat-card.losses .stat-value {
-    color: #c0392b;
+    color: var(--error);
 }
 
 .stat-card.winrate .stat-value {
-    color: #2980b9;
+    color: var(--info);
 }
 
 .stat-label {
-    font-size: 14px;
-    color: #7f8c8d;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-weight: 600;
 }
 
-/* 카드 통계 */
+/* Cards Stats */
 .cards-stats-section {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-primary);
+    transition: all var(--transition-base);
+}
+
+.cards-stats-section:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
 .cards-stats-section h3 {
-    margin: 0 0 20px 0;
-    color: #2c3e50;
-    font-size: 24px;
+    margin: 0 0 var(--space-6) 0;
+    color: var(--text-primary);
+    font-size: var(--text-2xl);
 }
 
 .total-cards {
     text-align: center;
-    margin-bottom: 30px;
-    padding: 20px;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    border-radius: 15px;
-    color: white;
+    margin-bottom: var(--space-8);
+    padding: var(--space-6);
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
+    border-radius: var(--radius-lg);
+    color: var(--text-inverse);
 }
 
 .total-cards-count {
-    font-size: 48px;
-    font-weight: bold;
-    margin-right: 10px;
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    margin-right: var(--space-2);
 }
 
 .total-cards-label {
-    font-size: 24px;
+    font-size: var(--text-2xl);
 }
 
 .cards-by-tier {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 15px;
+    gap: var(--space-4);
 }
 
 .tier-stat {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 20px;
-    border: 3px solid;
-    border-radius: 15px;
-    background: #f8f9fa;
-    transition: transform 0.3s;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--border-primary);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    transition: all var(--transition-fast);
 }
 
 .tier-stat:hover {
-    transform: translateX(5px);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-secondary);
 }
 
 .tier-icon {
     width: 50px;
     height: 50px;
-    border-radius: 10px;
+    border-radius: var(--radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
-    color: white;
+    font-size: var(--text-2xl);
+    color: var(--text-inverse);
     flex-shrink: 0;
 }
 
@@ -254,67 +285,74 @@
     flex: 1;
 }
 
-.tier-name {
-    font-size: 16px;
-    color: #7f8c8d;
-    margin-bottom: 5px;
+.tier-name-label {
+    font-size: var(--text-base);
+    color: var(--text-secondary);
+    margin-bottom: var(--space-1);
 }
 
 .tier-count {
-    font-size: 24px;
-    font-weight: bold;
-    color: #2c3e50;
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--text-primary);
 }
 
-/* 최근 배틀 */
+/* Recent Battles */
 .recent-battles-section {
-    background: white;
-    border-radius: 20px;
-    padding: 30px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    background: var(--bg-elevated);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-primary);
+    transition: all var(--transition-base);
+}
+
+.recent-battles-section:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
 }
 
 .recent-battles-section h3 {
-    margin: 0 0 20px 0;
-    color: #2c3e50;
-    font-size: 24px;
+    margin: 0 0 var(--space-6) 0;
+    color: var(--text-primary);
+    font-size: var(--text-2xl);
 }
 
 .no-battles {
     text-align: center;
-    color: #95a5a6;
-    padding: 40px 0;
+    color: var(--text-tertiary);
+    padding: var(--space-8);
 }
 
 .battles-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-3);
 }
 
 .battle-item {
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 20px;
-    border-radius: 12px;
-    border-left: 5px solid;
-    transition: transform 0.2s, box-shadow 0.2s;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    border-left: 4px solid;
+    transition: all var(--transition-fast);
 }
 
 .battle-item.win {
-    background: #f0fff4;
-    border-color: #27ae60;
+    background: var(--success-bg);
+    border-color: var(--success);
 }
 
 .battle-item.loss {
-    background: #fff5f5;
-    border-color: #e74c3c;
+    background: var(--error-bg);
+    border-color: var(--error);
 }
 
 .battle-item:hover {
-    transform: translateX(5px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-md);
 }
 
 .battle-result {
@@ -322,24 +360,23 @@
 }
 
 .result-badge {
-    display: inline-block;
+    display: inline-flex;
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
-    font-weight: bold;
-    color: white;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-inverse);
 }
 
 .battle-item.win .result-badge {
-    background: #27ae60;
+    background: var(--success);
 }
 
 .battle-item.loss .result-badge {
-    background: #e74c3c;
+    background: var(--error);
 }
 
 .battle-details {
@@ -347,74 +384,82 @@
 }
 
 .battle-opponent {
-    font-size: 18px;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 5px;
+    font-size: var(--text-lg);
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: var(--space-1);
 }
 
 .battle-date {
-    font-size: 14px;
-    color: #7f8c8d;
+    font-size: var(--text-sm);
+    color: var(--text-secondary);
 }
 
 .battle-tp-change {
     flex-shrink: 0;
-    font-size: 20px;
-    font-weight: bold;
+    font-size: var(--text-xl);
+    font-weight: 700;
 }
 
 .battle-tp-change .positive {
-    color: #27ae60;
+    color: var(--success);
 }
 
 .battle-tp-change .negative {
-    color: #e74c3c;
+    color: var(--error);
 }
 
-/* 로딩 & 에러 */
+/* Loading & Error */
 .loading-text {
     text-align: center;
-    color: white;
-    font-size: 18px;
-    padding: 40px;
+    color: var(--text-secondary);
+    font-size: var(--text-lg);
+    padding: var(--space-8);
 }
 
 .error-message {
     text-align: center;
-    color: white;
-    padding: 40px;
+    padding: var(--space-8);
 }
 
 .error-message h2 {
-    margin-bottom: 15px;
+    color: var(--error);
+    margin-bottom: var(--space-4);
+}
+
+.error-message p {
+    color: var(--text-secondary);
+    margin-bottom: var(--space-6);
 }
 
 .error-message button {
-    background: #3498db;
-    color: white;
+    padding: var(--space-3) var(--space-6);
+    background: var(--brand-primary);
+    color: var(--text-inverse);
     border: none;
-    padding: 12px 30px;
-    border-radius: 8px;
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    font-weight: 600;
     cursor: pointer;
-    margin-top: 20px;
-    font-size: 16px;
+    transition: all var(--transition-base);
 }
 
 .error-message button:hover {
-    background: #2980b9;
+    background: var(--brand-primary-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
-/* 반응형 */
+/* Responsive */
 @media (max-width: 768px) {
     .profile-header {
         flex-direction: column;
         text-align: center;
-        padding: 30px 20px;
+        padding: var(--space-6);
     }
 
     .username {
-        font-size: 28px;
+        font-size: var(--text-3xl);
     }
 
     .stats-grid {
