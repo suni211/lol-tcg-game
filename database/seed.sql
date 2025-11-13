@@ -75,7 +75,14 @@ INSERT INTO cards_master (player_name, season, region, team, position, overall_r
 ('Pyosik', '25 LCK', 'LCK', 'DNF', 'JUNGLE', 79, 'RARE', 300, 35, 83, 45, 35, 40, 80, 78, 79, '/images/cards/pyosik_25.jpg'),
 ('BuLLDoG', '25 LCK', 'LCK', 'DNF', 'MID', 67, 'RARE', 300, 30, 40, 71, 35, 35, 68, 69, 66, '/images/cards/bulldog_25.jpg'),
 ('Berserker', '25 LCK', 'LCK', 'DNF', 'ADC', 82, 'EPIC', 1000, 30, 35, 40, 85, 40, 83, 84, 81, '/images/cards/berserker_25.jpg'),
-('Life', '25 LCK', 'LCK', 'DNF', 'SUPPORT', 77, 'RARE', 300, 30, 40, 45, 40, 81, 78, 76, 77, '/images/cards/life_25.jpg');
+('Life', '25 LCK', 'LCK', 'DNF', 'SUPPORT', 77, 'RARE', 300, 30, 40, 45, 40, 81, 78, 76, 77, '/images/cards/life_25.jpg'),
+
+-- BNK FEARX
+('Clear', '25 LCK', 'LCK', 'FEARX', 'TOP', 75, 'RARE', 300, 79, 35, 40, 30, 35, 76, 77, 74, '/images/cards/clear_25.jpg'),
+('Willer', '25 LCK', 'LCK', 'FEARX', 'JUNGLE', 73, 'RARE', 300, 35, 77, 45, 35, 40, 74, 72, 73, '/images/cards/willer_25.jpg'),
+('VicLa', '25 LCK', 'LCK', 'FEARX', 'MID', 76, 'RARE', 300, 30, 40, 80, 35, 35, 77, 78, 75, '/images/cards/vicla_25.jpg'),
+('Diable', '25 LCK', 'LCK', 'FEARX', 'ADC', 74, 'RARE', 300, 30, 35, 40, 78, 40, 75, 76, 73, '/images/cards/diable_25.jpg'),
+('Kellin', '25 LCK', 'LCK', 'FEARX', 'SUPPORT', 77, 'RARE', 300, 30, 40, 45, 40, 81, 78, 76, 77, '/images/cards/kellin_25.jpg');
 
 -- ============================================
 -- 2025 LPL 선수 카드

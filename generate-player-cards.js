@@ -13,6 +13,7 @@ const teamColors = {
   'BRO': { primary: '#0EA5E9', secondary: '#0369A1', accent: '#FFFFFF' },
   'DRX': { primary: '#3B82F6', secondary: '#1E40AF', accent: '#60A5FA' },
   'DNF': { primary: '#10B981', secondary: '#059669', accent: '#34D399' },
+  'FEARX': { primary: '#FF6B35', secondary: '#D84315', accent: '#FFD54F' },
   // LPL
   'BLG': { primary: '#FF1493', secondary: '#C71585', accent: '#FFD700' },
   'JDG': { primary: '#DC143C', secondary: '#8B0000', accent: '#FFFFFF' },
