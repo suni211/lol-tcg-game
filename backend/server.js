@@ -26,6 +26,7 @@ const cardsRouter = require('./routes/cards');
 const battleRouter = require('./routes/battle');
 const rankingRouter = require('./routes/ranking');
 const userRouter = require('./routes/user');
+const marketRouter = require('./routes/market');
 
 // 라우트 등록
 app.use('/api/auth', authRouter);
@@ -33,6 +34,7 @@ app.use('/api/cards', cardsRouter);
 app.use('/api/battle', battleRouter);
 app.use('/api/ranking', rankingRouter);
 app.use('/api/user', userRouter);
+app.use('/api/market', marketRouter);
 
 // 헬스 체크
 app.get('/api/health', (req, res) => {

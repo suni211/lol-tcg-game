@@ -86,6 +86,7 @@ function Dashboard({ token, user, setUser }) {
                 <div className="nav-links">
                     <Link to="/dashboard">대시보드</Link>
                     <Link to="/shop">카드 상점</Link>
+                    <Link to="/market">이적시장</Link>
                     <Link to="/deck">덱 관리</Link>
                     <Link to="/battle">배틀</Link>
                     <Link to="/rankings">랭킹</Link>

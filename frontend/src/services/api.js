@@ -84,4 +84,18 @@ export const userAPI = {
     getProfile: () => api.get('/user/profile'),
 };
 
+// 이적시장 API
+export const marketAPI = {
+    getListings: (filters) => api.get('/market/listings', { params: filters }),
+    getCardPrice: (cardId) => api.get(`/market/price/${cardId}`),
+    createListing: (userCardId, listingPrice) => api.post('/market/sell', { userCardId, listingPrice }),
+    createBid: (cardId, bidPrice) => api.post('/market/bid', { cardId, bidPrice }),
+    instantBuy: (listingId) => api.post(`/market/buy/${listingId}`),
+    instantSell: (userCardId) => api.post('/market/sell-instant', { userCardId }),
+    getMyListings: () => api.get('/market/my-listings'),
+    getMyBids: () => api.get('/market/my-bids'),
+    cancelListing: (listingId) => api.delete(`/market/listing/${listingId}`),
+    cancelBid: (bidId) => api.delete(`/market/bid/${bidId}`),
+};
+
 export default api;

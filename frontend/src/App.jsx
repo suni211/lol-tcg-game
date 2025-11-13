@@ -9,6 +9,7 @@ import Battle from './pages/Battle';
 import BattleDetail from './pages/BattleDetail';
 import Rankings from './pages/Rankings';
 import Profile from './pages/Profile';
+import Market from './pages/Market';
 import './App.css';
 
 function App() {
@@ -83,6 +84,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Profile token={token} />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/market"
+            element={
+              <PrivateRoute>
+                <Market token={token} />
               </PrivateRoute>
             }
           />
