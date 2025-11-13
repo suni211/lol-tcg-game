@@ -98,4 +98,19 @@ export const marketAPI = {
     cancelBid: (bidId) => api.delete(`/market/bid/${bidId}`),
 };
 
+// 출석체크 API
+export const attendanceAPI = {
+    checkIn: () => api.post('/attendance/checkin'),
+    getStatus: () => api.get('/attendance/status'),
+    getHistory: (days = 30) => api.get('/attendance/history', { params: { days } }),
+    getStats: () => api.get('/attendance/stats'),
+};
+
+// 카드 강화 API
+export const enhancementAPI = {
+    enhance: (targetCardId, materialCardId) => api.post('/enhancement/enhance', { targetCardId, materialCardId }),
+    getDuplicates: (targetCardId) => api.get(`/enhancement/duplicates/${targetCardId}`),
+    getHistory: (limit = 50) => api.get('/enhancement/history', { params: { limit } }),
+};
+
 export default api;

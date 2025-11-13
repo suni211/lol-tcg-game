@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { authAPI, battleAPI, rankingAPI } from '../services/api';
+import { authAPI, battleAPI, rankingAPI, attendanceAPI } from '../services/api';
 import './Dashboard.css';
 
 function Dashboard({ token, user, setUser }) {
     const [userData, setUserData] = useState(null);
     const [energy, setEnergy] = useState(null);
     const [myRank, setMyRank] = useState(null);
+    const [attendanceStatus, setAttendanceStatus] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const intervalRef = useRef(null);
@@ -15,15 +16,17 @@ function Dashboard({ token, user, setUser }) {
     const fetchData = useCallback(async () => {
         try {
             setError(null);
-            const [userRes, energyRes, rankRes] = await Promise.all([
+            const [userRes, energyRes, rankRes, attendanceRes] = await Promise.all([
                 authAPI.getMe(),
                 battleAPI.getEnergy(),
-                rankingAPI.getMyRank()
+                rankingAPI.getMyRank(),
+                attendanceAPI.getStatus()
             ]);
 
             setUserData(userRes.data);
             setEnergy(energyRes.data);
             setMyRank(rankRes.data);
+            setAttendanceStatus(attendanceRes.data);
 
             // setUser는 초기 로딩 시에만 호출
             if (!user) {
@@ -60,6 +63,16 @@ function Dashboard({ token, user, setUser }) {
     const handleLogout = () => {
         localStorage.removeItem('token');
         navigate('/login');
+    };
+
+    const handleCheckIn = async () => {
+        try {
+            const response = await attendanceAPI.checkIn();
+            alert(`출석체크 완료! ${response.data.pointsEarned} 포인트를 받았습니다.\n연속 출석: ${response.data.currentStreak}일`);
+            fetchData(); // 데이터 새로고침
+        } catch (error) {
+            alert(error.response?.data?.error || '출석체크에 실패했습니다.');
+        }
     };
 
     if (loading) {
@@ -138,6 +151,25 @@ function Dashboard({ token, user, setUser }) {
                             </p>
                         )}
                     </div>
+                </div>
+
+                <div className="attendance-card">
+                    <h3>출석체크</h3>
+                    {attendanceStatus?.checkedIn ? (
+                        <div className="attendance-complete">
+                            <p>오늘 출석체크 완료!</p>
+                            <p className="points-earned">+{attendanceStatus.todayPoints} 포인트</p>
+                            <p className="streak-info">연속 출석: {attendanceStatus.currentStreak}일</p>
+                        </div>
+                    ) : (
+                        <div className="attendance-pending">
+                            <p>오늘 출석체크를 하지 않았습니다</p>
+                            <p className="streak-info">현재 연속: {attendanceStatus?.currentStreak || 0}일</p>
+                            <button onClick={handleCheckIn} className="checkin-btn">
+                                출석체크하기
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 <div className="quick-actions">

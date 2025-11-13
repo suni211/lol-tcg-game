@@ -27,6 +27,8 @@ const battleRouter = require('./routes/battle');
 const rankingRouter = require('./routes/ranking');
 const userRouter = require('./routes/user');
 const marketRouter = require('./routes/market');
+const attendanceRouter = require('./routes/attendance');
+const enhancementRouter = require('./routes/enhancement');
 
 // 라우트 등록
 app.use('/api/auth', authRouter);
@@ -35,6 +37,8 @@ app.use('/api/battle', battleRouter);
 app.use('/api/ranking', rankingRouter);
 app.use('/api/user', userRouter);
 app.use('/api/market', marketRouter);
+app.use('/api/attendance', attendanceRouter);
+app.use('/api/enhancement', enhancementRouter);
 
 // 헬스 체크
 app.get('/api/health', (req, res) => {

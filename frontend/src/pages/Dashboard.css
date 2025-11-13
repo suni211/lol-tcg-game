@@ -140,3 +140,67 @@
     margin-top: 15px;
     line-height: 1.8;
 }
+
+/* 출석체크 카드 */
+.attendance-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.attendance-card h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+.attendance-complete {
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #52c234, #42a628);
+    border-radius: 8px;
+    color: white;
+}
+
+.attendance-complete p {
+    margin: 8px 0;
+}
+
+.points-earned {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.streak-info {
+    font-size: 0.9em;
+    opacity: 0.9;
+}
+
+.attendance-pending {
+    text-align: center;
+    padding: 20px;
+}
+
+.attendance-pending p {
+    margin: 8px 0;
+    color: #666;
+}
+
+.checkin-btn {
+    margin-top: 15px;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.checkin-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}

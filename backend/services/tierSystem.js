@@ -100,6 +100,12 @@ class TierSystem {
         // 패자 티어 포인트 감소
         const loserUpdate = await this.updateTier(db, loserId, -9);
 
+        // 승자에게 50 포인트 지급
+        await db.query(
+            'UPDATE users SET points = points + 50 WHERE user_id = ?',
+            [winnerId]
+        );
+
         return {
             winner: winnerUpdate,
             loser: loserUpdate

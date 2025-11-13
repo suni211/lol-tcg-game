@@ -163,11 +163,12 @@ class CardSystem {
     // 사용자 소유 카드 목록
     async getUserCards(db, userId) {
         const [cards] = await db.query(
-            `SELECT uc.user_card_id, cm.*
+            `SELECT uc.user_card_id, uc.enhancement_level, uc.enhanced_ovr, cm.*,
+            COALESCE(uc.enhanced_ovr, cm.ovr) as current_ovr
             FROM user_cards uc
             JOIN cards_master cm ON uc.card_id = cm.card_id
             WHERE uc.user_id = ?
-            ORDER BY cm.overall_rating DESC, cm.card_id ASC`,
+            ORDER BY current_ovr DESC, cm.card_id ASC`,
             [userId]
         );
 
@@ -251,14 +252,31 @@ class CardSystem {
             throw new Error('덱을 찾을 수 없거나 권한이 없습니다.');
         }
 
-        // 카드 소유권 확인
+        // 카드 소유권 확인 및 카드 정보 가져오기
         const [card] = await db.query(
-            'SELECT user_card_id FROM user_cards WHERE user_card_id = ? AND user_id = ?',
+            `SELECT uc.user_card_id, cm.player_name
+            FROM user_cards uc
+            JOIN cards_master cm ON uc.card_id = cm.card_id
+            WHERE uc.user_card_id = ? AND uc.user_id = ?`,
             [userCardId, userId]
         );
 
         if (card.length === 0) {
             throw new Error('카드를 찾을 수 없거나 권한이 없습니다.');
+        }
+
+        // 같은 선수가 덱에 이미 있는지 확인 (다른 포지션에)
+        const [duplicatePlayer] = await db.query(
+            `SELECT dc.position
+            FROM deck_cards dc
+            JOIN user_cards uc ON dc.user_card_id = uc.user_card_id
+            JOIN cards_master cm ON uc.card_id = cm.card_id
+            WHERE dc.deck_id = ? AND cm.player_name = ? AND dc.position != ?`,
+            [deckId, card[0].player_name, position]
+        );
+
+        if (duplicatePlayer.length > 0) {
+            throw new Error(`같은 선수(${card[0].player_name})를 중복으로 사용할 수 없습니다.`);
         }
 
         // 해당 포지션에 이미 카드가 있는지 확인
@@ -319,13 +337,16 @@ class CardSystem {
             `SELECT
                 dc.position as deck_position,
                 uc.user_card_id,
+                uc.enhancement_level,
+                uc.enhanced_ovr,
                 cm.card_id,
                 cm.player_name,
                 cm.team,
                 cm.region,
                 cm.season,
                 cm.position as card_position,
-                cm.overall_rating,
+                cm.ovr as base_ovr,
+                COALESCE(uc.enhanced_ovr, cm.ovr) as overall_rating,
                 cm.card_tier,
                 cm.card_price,
                 cm.image_url
@@ -353,7 +374,9 @@ class CardSystem {
         // 각 덱의 카드 정보 가져오기
         for (const deck of decks) {
             const [cards] = await db.query(
-                `SELECT dc.position, cm.player_name, cm.overall_rating, cm.position as card_position
+                `SELECT dc.position, uc.enhancement_level, cm.player_name,
+                COALESCE(uc.enhanced_ovr, cm.ovr) as overall_rating,
+                cm.position as card_position
                 FROM deck_cards dc
                 JOIN user_cards uc ON dc.user_card_id = uc.user_card_id
                 JOIN cards_master cm ON uc.card_id = cm.card_id
