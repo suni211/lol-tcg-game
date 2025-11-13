@@ -1,0 +1,137 @@
+.battle-detail-container {
+    min-height: 100vh;
+    background-color: #f5f5f5;
+}
+
+.battle-detail-nav {
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.battle-detail-nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.battle-detail-nav h2 {
+    margin: 0;
+}
+
+.battle-detail-content {
+    padding: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.battle-summary {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.battle-vs {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: 30px;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.player-box {
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    border: 3px solid;
+}
+
+.player-box.winner {
+    border-color: #27ae60;
+    background: linear-gradient(135deg, #d4edda, #c3e6cb);
+}
+
+.player-box.loser {
+    border-color: #e74c3c;
+    background: linear-gradient(135deg, #f8d7da, #f5c6cb);
+}
+
+.player-box h3 {
+    margin: 0 0 15px 0;
+    font-size: 24px;
+}
+
+.tier-change {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.player-box.winner .tier-change {
+    color: #27ae60;
+}
+
+.player-box.loser .tier-change {
+    color: #e74c3c;
+}
+
+.vs-text {
+    font-size: 32px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.battle-result {
+    text-align: center;
+    padding: 20px;
+    background: #ecf0f1;
+    border-radius: 8px;
+}
+
+.battle-result h2 {
+    margin: 0 0 15px 0;
+    color: #2c3e50;
+}
+
+.battle-result p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.battle-log-section {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+}
+
+.battle-log-section h3 {
+    margin-top: 0;
+}
+
+.battle-log {
+    background: #2c3e50;
+    color: #ecf0f1;
+    padding: 20px;
+    border-radius: 8px;
+    max-height: 600px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+}
+
+.battle-log pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    line-height: 1.6;
+}
+
+.loading, .error {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-size: 24px;
+    color: #666;
+}

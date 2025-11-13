@@ -1,0 +1,102 @@
+# Google Cloud Build 설정 파일
+# GitHub Push 시 자동으로 GCP에 배포
+
+steps:
+  # 1. Backend Docker 이미지 빌드
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/lol-tcg-backend:$SHORT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/lol-tcg-backend:latest'
+      - './backend'
+    id: 'build-backend'
+
+  # 2. Backend 이미지를 Container Registry에 푸시
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/lol-tcg-backend:$SHORT_SHA'
+    id: 'push-backend'
+    waitFor: ['build-backend']
+
+  # 3. Backend를 Cloud Run에 배포
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'lol-tcg-backend'
+      - '--image=gcr.io/$PROJECT_ID/lol-tcg-backend:$SHORT_SHA'
+      - '--region=asia-northeast3'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=512Mi'
+      - '--cpu=1'
+      - '--max-instances=10'
+      - '--set-cloudsql-instances=$_CLOUDSQL_INSTANCE'
+      - '--set-env-vars=DB_HOST=/cloudsql/$_CLOUDSQL_INSTANCE'
+      - '--update-secrets=DB_PASSWORD=db-password:latest'
+      - '--update-secrets=JWT_SECRET=jwt-secret:latest'
+    id: 'deploy-backend'
+    waitFor: ['push-backend']
+
+  # 4. Frontend Docker 이미지 빌드
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/lol-tcg-frontend:$SHORT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/lol-tcg-frontend:latest'
+      - '--build-arg'
+      - 'VITE_API_URL=$_BACKEND_URL/api'
+      - './frontend'
+    id: 'build-frontend'
+    waitFor: ['deploy-backend']
+
+  # 5. Frontend 이미지를 Container Registry에 푸시
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/lol-tcg-frontend:$SHORT_SHA'
+    id: 'push-frontend'
+    waitFor: ['build-frontend']
+
+  # 6. Frontend를 Cloud Run에 배포
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'lol-tcg-frontend'
+      - '--image=gcr.io/$PROJECT_ID/lol-tcg-frontend:$SHORT_SHA'
+      - '--region=asia-northeast3'
+      - '--platform=managed'
+      - '--allow-unauthenticated'
+      - '--memory=256Mi'
+      - '--cpu=1'
+      - '--max-instances=5'
+    id: 'deploy-frontend'
+    waitFor: ['push-frontend']
+
+# 빌드된 이미지들을 Container Registry에 저장
+images:
+  - 'gcr.io/$PROJECT_ID/lol-tcg-backend:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/lol-tcg-backend:latest'
+  - 'gcr.io/$PROJECT_ID/lol-tcg-frontend:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/lol-tcg-frontend:latest'
+
+# 빌드 타임아웃 설정 (기본 10분)
+timeout: '1200s'
+
+# 빌드 옵션
+options:
+  machineType: 'N1_HIGHCPU_8'  # 빌드 성능 향상
+  logging: CLOUD_LOGGING_ONLY
+
+# 치환 변수 (Cloud Build 트리거에서 설정)
+substitutions:
+  _CLOUDSQL_INSTANCE: 'PROJECT_ID:asia-northeast3:lol-tcg-db'
+  _BACKEND_URL: 'https://lol-tcg-backend-xxxxx.run.app'

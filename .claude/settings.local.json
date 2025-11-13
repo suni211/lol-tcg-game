@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(npm run dev:*)",
+      "Bash(curl:*)",
+      "Bash(dir:*)",
+      "Bash(powershell -Command \"Get-ChildItem -Path . -Recurse -Filter Dashboard.jsx | Select-Object -ExpandProperty FullName\")",
+      "Bash(node -e:*)",
+      "Bash(nul)",
+      "Bash(git init:*)",
+      "Bash(git config:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

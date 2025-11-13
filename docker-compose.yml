@@ -1,0 +1,84 @@
+version: '3.8'
+
+services:
+  # MariaDB Database
+  database:
+    image: mariadb:10.11
+    container_name: lol-tcg-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootpassword}
+      MYSQL_DATABASE: ${DB_NAME:-lol_tcg_game}
+      MYSQL_USER: ${DB_USER:-lol_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-lol_password}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/2-seed.sql
+    ports:
+      - "3306:3306"
+    networks:
+      - lol-tcg-network
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: lol-tcg-backend
+    restart: unless-stopped
+    environment:
+      DB_HOST: database
+      DB_USER: ${DB_USER:-lol_user}
+      DB_PASSWORD: ${DB_PASSWORD:-lol_password}
+      DB_NAME: ${DB_NAME:-lol_tcg_game}
+      JWT_SECRET: ${JWT_SECRET:-your_jwt_secret_key_change_this_in_production}
+      PORT: 5000
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      NODE_ENV: production
+    ports:
+      - "5000:5000"
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - lol-tcg-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend (React + Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_URL=${VITE_API_URL:-http://localhost:5000/api}
+    container_name: lol-tcg-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - lol-tcg-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  lol-tcg-network:
+    driver: bridge

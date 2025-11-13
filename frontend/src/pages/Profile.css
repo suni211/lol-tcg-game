@@ -1,0 +1,432 @@
+.profile-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.profile-nav {
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.profile-nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    transition: opacity 0.3s;
+}
+
+.profile-nav a:hover {
+    opacity: 0.8;
+}
+
+.profile-nav h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.profile-content {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+/* 프로필 헤더 */
+.profile-header {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.profile-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-icon {
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 60px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.username {
+    margin: 0 0 15px 0;
+    font-size: 36px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.tier-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border: 3px solid;
+    border-radius: 30px;
+    margin-bottom: 10px;
+    background: white;
+}
+
+.tier-name {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.tier-points {
+    font-size: 16px;
+    color: #7f8c8d;
+}
+
+.rank-text {
+    font-size: 18px;
+    color: #34495e;
+    margin: 10px 0 5px 0;
+    font-weight: 600;
+}
+
+.joined-date {
+    color: #95a5a6;
+    margin: 0;
+}
+
+/* 통계 섹션 */
+.stats-section {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.stats-section h3 {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 24px;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 15px;
+    text-align: center;
+    border: 3px solid #ecf0f1;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.stat-card.wins {
+    border-color: #2ecc71;
+    background: linear-gradient(135deg, #f0fff4, #f0fff4);
+}
+
+.stat-card.losses {
+    border-color: #e74c3c;
+    background: linear-gradient(135deg, #fff5f5, #fff5f5);
+}
+
+.stat-card.winrate {
+    border-color: #3498db;
+    background: linear-gradient(135deg, #eff8ff, #eff8ff);
+}
+
+.stat-value {
+    font-size: 36px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 8px;
+}
+
+.stat-card.wins .stat-value {
+    color: #27ae60;
+}
+
+.stat-card.losses .stat-value {
+    color: #c0392b;
+}
+
+.stat-card.winrate .stat-value {
+    color: #2980b9;
+}
+
+.stat-label {
+    font-size: 14px;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 카드 통계 */
+.cards-stats-section {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.cards-stats-section h3 {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 24px;
+}
+
+.total-cards {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 15px;
+    color: white;
+}
+
+.total-cards-count {
+    font-size: 48px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.total-cards-label {
+    font-size: 24px;
+}
+
+.cards-by-tier {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.tier-stat {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    border: 3px solid;
+    border-radius: 15px;
+    background: #f8f9fa;
+    transition: transform 0.3s;
+}
+
+.tier-stat:hover {
+    transform: translateX(5px);
+}
+
+.tier-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.tier-info {
+    flex: 1;
+}
+
+.tier-name {
+    font-size: 16px;
+    color: #7f8c8d;
+    margin-bottom: 5px;
+}
+
+.tier-count {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+/* 최근 배틀 */
+.recent-battles-section {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.recent-battles-section h3 {
+    margin: 0 0 20px 0;
+    color: #2c3e50;
+    font-size: 24px;
+}
+
+.no-battles {
+    text-align: center;
+    color: #95a5a6;
+    padding: 40px 0;
+}
+
+.battles-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.battle-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 5px solid;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.battle-item.win {
+    background: #f0fff4;
+    border-color: #27ae60;
+}
+
+.battle-item.loss {
+    background: #fff5f5;
+    border-color: #e74c3c;
+}
+
+.battle-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.battle-result {
+    flex-shrink: 0;
+}
+
+.result-badge {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+.battle-item.win .result-badge {
+    background: #27ae60;
+}
+
+.battle-item.loss .result-badge {
+    background: #e74c3c;
+}
+
+.battle-details {
+    flex: 1;
+}
+
+.battle-opponent {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 5px;
+}
+
+.battle-date {
+    font-size: 14px;
+    color: #7f8c8d;
+}
+
+.battle-tp-change {
+    flex-shrink: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.battle-tp-change .positive {
+    color: #27ae60;
+}
+
+.battle-tp-change .negative {
+    color: #e74c3c;
+}
+
+/* 로딩 & 에러 */
+.loading-text {
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    padding: 40px;
+}
+
+.error-message {
+    text-align: center;
+    color: white;
+    padding: 40px;
+}
+
+.error-message h2 {
+    margin-bottom: 15px;
+}
+
+.error-message button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 20px;
+    font-size: 16px;
+}
+
+.error-message button:hover {
+    background: #2980b9;
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+    .profile-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+    }
+
+    .username {
+        font-size: 28px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .cards-by-tier {
+        grid-template-columns: 1fr;
+    }
+
+    .battle-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

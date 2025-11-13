@@ -1,0 +1,294 @@
+.shop-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.shop-nav {
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.shop-nav a {
+    color: white;
+    text-decoration: none;
+    transition: opacity 0.3s;
+}
+
+.shop-nav a:hover {
+    opacity: 0.8;
+}
+
+.points-display {
+    background: #27ae60;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.shop-info {
+    text-align: center;
+    padding: 30px 20px;
+    color: white;
+}
+
+.shop-info h3 {
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.packs-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 20px 40px 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.pack-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 3px solid;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.pack-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+}
+
+.pack-header {
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
+
+.pack-header h3 {
+    margin: 0 0 10px 0;
+    font-size: 24px;
+}
+
+.pack-price {
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.pack-body {
+    padding: 20px;
+}
+
+.pack-description {
+    text-align: center;
+    color: #666;
+    margin-bottom: 20px;
+    font-style: italic;
+}
+
+.pack-rates {
+    margin: 20px 0;
+}
+
+.pack-rates h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.rate-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: #f8f9fa;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.rate-tier {
+    font-weight: bold;
+}
+
+.rate-percentage {
+    color: #666;
+}
+
+.purchase-pack-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    margin-top: 10px;
+}
+
+.purchase-pack-btn:hover:not(:disabled) {
+    opacity: 0.9;
+}
+
+.purchase-pack-btn:disabled {
+    background: #ccc !important;
+    cursor: not-allowed;
+}
+
+/* 결과 모달 */
+.result-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.result-modal {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 400px;
+    width: 90%;
+    animation: slideUp 0.4s;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.result-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.result-header h2 {
+    margin: 0;
+    color: #333;
+}
+
+.result-card {
+    border: 3px solid;
+    border-radius: 15px;
+    padding: 20px;
+    background: #f8f9fa;
+    margin-bottom: 20px;
+}
+
+.result-card-tier {
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.result-card-ovr {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+.result-card-image {
+    height: 200px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.result-card-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+
+.result-card-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.result-card-info {
+    text-align: center;
+    color: #666;
+}
+
+.result-card-info p {
+    margin: 5px 0;
+}
+
+.result-footer {
+    text-align: center;
+}
+
+.result-footer p {
+    font-size: 18px;
+    font-weight: bold;
+    color: #27ae60;
+    margin-bottom: 15px;
+}
+
+.result-footer button {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.result-footer button:hover {
+    background: #2980b9;
+}
+
+.goto-deck-btn {
+    display: inline-block;
+    background: #27ae60;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.goto-deck-btn:hover {
+    background: #229954;
+}
