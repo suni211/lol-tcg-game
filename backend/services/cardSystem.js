@@ -58,9 +58,9 @@ class CardSystem {
     async purchaseRandomCard(db, userId, packTier) {
         // 팩 가격 및 확률 정의
         const packs = {
-            COMMON: { price: 100, tiers: { COMMON: 100 } },
-            RARE: { price: 300, tiers: { COMMON: 50, RARE: 50 } },
-            EPIC: { price: 1000, tiers: { COMMON: 20, RARE: 30, EPIC: 40, LEGENDARY: 10 } }
+            COMMON: { price: 100, tiers: { COMMON: 90, RARE: 10 } },
+            RARE: { price: 300, tiers: { COMMON: 60, RARE: 35, EPIC: 5 } },
+            EPIC: { price: 500, tiers: { COMMON: 40, RARE: 40, EPIC: 18, LEGENDARY: 2 } }
         };
 
         if (!packs[packTier]) {
