@@ -17,9 +17,10 @@ function CardShop({ token }) {
             name: '일반 팩',
             price: 100,
             color: '#808080',
-            description: '100% 일반 등급 카드',
+            description: '일반 등급 중심 (희귀 10%)',
             rates: [
-                { tier: 'COMMON', rate: 100, color: '#808080' }
+                { tier: 'COMMON', rate: 90, color: '#808080' },
+                { tier: 'RARE', rate: 10, color: '#4169e1' }
             ]
         },
         {
@@ -27,23 +28,24 @@ function CardShop({ token }) {
             name: '희귀 팩',
             price: 300,
             color: '#4169e1',
-            description: '일반~희귀 등급 카드',
+            description: '희귀 등급 중심 (영웅 5%)',
             rates: [
-                { tier: 'COMMON', rate: 50, color: '#808080' },
-                { tier: 'RARE', rate: 50, color: '#4169e1' }
+                { tier: 'COMMON', rate: 60, color: '#808080' },
+                { tier: 'RARE', rate: 35, color: '#4169e1' },
+                { tier: 'EPIC', rate: 5, color: '#9400d3' }
             ]
         },
         {
             id: 'EPIC',
             name: '프리미엄 팩',
-            price: 1000,
+            price: 500,
             color: '#9400d3',
-            description: '모든 등급 카드 획득 가능!',
+            description: '영웅 등급 중심 (전설 2%)',
             rates: [
-                { tier: 'COMMON', rate: 20, color: '#808080' },
-                { tier: 'RARE', rate: 30, color: '#4169e1' },
-                { tier: 'EPIC', rate: 40, color: '#9400d3' },
-                { tier: 'LEGENDARY', rate: 10, color: '#ff8c00' }
+                { tier: 'COMMON', rate: 40, color: '#808080' },
+                { tier: 'RARE', rate: 40, color: '#4169e1' },
+                { tier: 'EPIC', rate: 18, color: '#9400d3' },
+                { tier: 'LEGENDARY', rate: 2, color: '#ff8c00' }
             ]
         }
     ];
