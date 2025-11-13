@@ -25,7 +25,8 @@
       "Bash(node generate-player-cards.js:*)",
       "Bash(git reset:*)",
       "Bash(git fetch:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(node adjust-tiers.js:*)"
     ],
     "deny": [],
     "ask": []

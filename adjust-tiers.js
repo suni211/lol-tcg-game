@@ -3,10 +3,10 @@ const fs = require('fs');
 let sql = fs.readFileSync('./database/seed.sql', 'utf-8');
 
 // OVR 기준으로 등급 재설정
-// 95+ -> LEGENDARY
-// 85-94 -> EPIC
-// 75-84 -> RARE
-// 65-74 -> COMMON
+// 96+ -> LEGENDARY (최상위, 가장 희귀)
+// 92-95 -> EPIC (상위)
+// 85-91 -> RARE (중위)
+// ~84 -> COMMON (하위, 가장 많음)
 
 const lines = sql.split('\n');
 const newLines = [];
@@ -28,13 +28,13 @@ for (let line of lines) {
     let newTier = 'COMMON';
     let newPrice = 100;
 
-    if (ovr >= 95) {
+    if (ovr >= 96) {
       newTier = 'LEGENDARY';
       newPrice = 1000;
-    } else if (ovr >= 85) {
+    } else if (ovr >= 92) {
       newTier = 'EPIC';
       newPrice = 500;
-    } else if (ovr >= 75) {
+    } else if (ovr >= 85) {
       newTier = 'RARE';
       newPrice = 300;
     } else {
