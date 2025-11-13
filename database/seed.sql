@@ -79,7 +79,7 @@ INSERT INTO cards_master (player_name, season, region, team, position, overall_r
 
 -- BNK FEARX
 ('Clear', '25 LCK', 'LCK', 'FEARX', 'TOP', 75, 'RARE', 300, 79, 35, 40, 30, 35, 76, 77, 74, '/images/cards/clear_25.jpg'),
-('Willer', '25 LCK', 'LCK', 'FEARX', 'JUNGLE', 73, 'RARE', 300, 35, 77, 45, 35, 40, 74, 72, 73, '/images/cards/willer_25.jpg'),
+('Raptor', '25 LCK', 'LCK', 'FEARX', 'JUNGLE', 73, 'RARE', 300, 35, 77, 45, 35, 40, 74, 72, 73, '/images/cards/raptor_25.jpg'),
 ('VicLa', '25 LCK', 'LCK', 'FEARX', 'MID', 76, 'RARE', 300, 30, 40, 80, 35, 35, 77, 78, 75, '/images/cards/vicla_25.jpg'),
 ('Diable', '25 LCK', 'LCK', 'FEARX', 'ADC', 74, 'RARE', 300, 30, 35, 40, 78, 40, 75, 76, 73, '/images/cards/diable_25.jpg'),
 ('Kellin', '25 LCK', 'LCK', 'FEARX', 'SUPPORT', 77, 'RARE', 300, 30, 40, 45, 40, 81, 78, 76, 77, '/images/cards/kellin_25.jpg');

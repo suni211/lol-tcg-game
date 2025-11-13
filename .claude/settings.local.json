@@ -24,7 +24,8 @@
       "WebFetch(domain:namu.wiki)",
       "Bash(node generate-player-cards.js:*)",
       "Bash(git reset:*)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "WebSearch"
     ],
     "deny": [],
     "ask": []
